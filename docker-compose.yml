@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: lernraum_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lernraum_user
+      POSTGRES_PASSWORD: lernraum_password
+      POSTGRES_DB: lernraum_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - lernraum_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  lernraum_postgres_data:

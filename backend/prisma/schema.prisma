@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Lernraum {
+  id              Int        @id @default(autoincrement())
+  raumBezeichnung String
+  gebaeude        String
+  etage           String
+  kapazitaet      Int
+  status          RaumStatus @default(ACTIVE)
+  raumToken       String     @unique
+}
+
+enum RaumStatus {
+  ACTIVE
+  INACTIVE
+}

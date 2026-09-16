@@ -15,9 +15,32 @@ model Lernraum {
   kapazitaet      Int
   status          RaumStatus @default(ACTIVE)
   raumToken       String     @unique
+
+  sessions Session[]
+}
+
+model Session {
+  id         Int           @id @default(autoincrement())
+  clientId   String
+  lernraumId Int
+  status     SessionStatus @default(ACTIVE)
+  startedAt  DateTime      @default(now())
+  expiresAt  DateTime
+  endedAt    DateTime?
+
+  lernraum Lernraum @relation(fields: [lernraumId], references: [id], onDelete: Cascade)
+
+  @@index([clientId, status])
+  @@index([lernraumId, status])
 }
 
 enum RaumStatus {
   ACTIVE
   INACTIVE
+}
+
+enum SessionStatus {
+  ACTIVE
+  ENDED
+  EXPIRED
 }

@@ -81,11 +81,11 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
 
                 <div className="mt-2 flex items-end gap-2 sm:mt-3">
                   <span className="text-3xl font-bold leading-none text-[#075985] sm:text-4xl">
-                    —
+                    {room.freiePlaetze}
                   </span>
 
                   <span className="pb-1 text-sm font-semibold text-slate-500">
-                    Plätze frei
+                    {room.freiePlaetze === 1 ? "Platz frei" : "Plätze frei"}
                   </span>
                 </div>
 

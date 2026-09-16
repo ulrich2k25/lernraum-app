@@ -6,14 +6,55 @@ import { PrismaService } from '../prisma/prisma.service';
 export class RoomsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return this.prisma.lernraum.findMany();
+  async findAll() {
+    const rooms = await this.prisma.lernraum.findMany({
+      select: {
+        id: true,
+        raumBezeichnung: true,
+        gebaeude: true,
+        etage: true,
+        kapazitaet: true,
+        status: true,
+      },
+      orderBy: {
+        raumBezeichnung: 'asc',
+      },
+    });
+
+    const now = new Date();
+
+    return Promise.all(
+      rooms.map(async (room) => {
+        const aktiveSitzungen = await this.prisma.session.count({
+          where: {
+            lernraumId: room.id,
+            status: 'ACTIVE',
+            expiresAt: {
+              gt: now,
+            },
+          },
+        });
+
+        return {
+          ...room,
+          freiePlaetze: Math.max(room.kapazitaet - aktiveSitzungen, 0),
+        };
+      }),
+    );
   }
 
   async findOne(id: number) {
     const room = await this.prisma.lernraum.findUnique({
       where: {
         id,
+      },
+      select: {
+        id: true,
+        raumBezeichnung: true,
+        gebaeude: true,
+        etage: true,
+        kapazitaet: true,
+        status: true,
       },
     });
 
@@ -23,14 +64,27 @@ export class RoomsService {
       );
     }
 
-    return room;
+    const aktiveSitzungen = await this.prisma.session.count({
+      where: {
+        lernraumId: room.id,
+        status: 'ACTIVE',
+        expiresAt: {
+          gt: new Date(),
+        },
+      },
+    });
+
+    return {
+      ...room,
+      freiePlaetze: Math.max(room.kapazitaet - aktiveSitzungen, 0),
+    };
   }
 
   createTestRoom() {
     return this.prisma.lernraum.create({
       data: {
         raumBezeichnung: 'A101',
-        gebaeude: 'Geb‰ude A',
+        gebaeude: 'Geb√§ude A',
         etage: '1',
         kapazitaet: 30,
         raumToken: 'raum-a101',

@@ -28,7 +28,8 @@ export default function RoomCard({ room }: RoomCardProps) {
         <Link
           href={`/rooms/${room.id}`}
           aria-label={`Details zu ${room.raumBezeichnung}`}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#EDF7FA] text-xl text-[#075985] transition group-hover:bg-[#075985] group-hover:text-white"
+          title="Raumdetails öffnen"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#EDF7FA] text-xl text-[#075985] transition duration-200 hover:bg-[#075985] hover:text-white hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#0F8B8D] focus:ring-offset-2"
         >
           →
         </Link>
@@ -58,13 +59,17 @@ export default function RoomCard({ room }: RoomCardProps) {
 
           <p className="mt-1 text-2xl font-bold text-[#102A43]">
             {room.kapazitaet}
+
             <span className="ml-1 text-sm font-medium text-slate-400">
               Plätze
             </span>
           </p>
         </div>
 
-        <Link href={`/rooms/${room.id}`} className="text-right">
+        <Link
+          href={`/rooms/${room.id}`}
+          className="rounded-xl text-right transition hover:opacity-75 focus:outline-none focus:ring-2 focus:ring-[#0F8B8D] focus:ring-offset-2"
+        >
           <p className="text-sm font-semibold text-[#075985]">
             Details ansehen
           </p>

@@ -165,17 +165,27 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
 
             {/* Check-in */}
             <div className="mt-6 border-t border-slate-100 pt-6 sm:mt-8 sm:pt-7">
-              <button
-                type="button"
-                disabled={!isActive}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#075985] px-6 py-3.5 text-base font-bold text-white shadow-sm transition hover:bg-[#064B70] disabled:cursor-not-allowed disabled:bg-slate-300 sm:py-4 sm:text-lg"
-              >
-                Einchecken
-                <span aria-hidden="true">→</span>
-              </button>
+              {isActive ? (
+                <Link
+                  href={`/rooms/${room.id}/check-in`}
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#075985] px-6 py-3.5 text-base font-bold text-white shadow-sm transition hover:bg-[#064B70] sm:py-4 sm:text-lg"
+                >
+                  Einchecken
+                  <span aria-hidden="true">→</span>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  disabled
+                  className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-2xl bg-slate-300 px-6 py-3.5 text-base font-bold text-white sm:py-4 sm:text-lg"
+                >
+                  Einchecken
+                  <span aria-hidden="true">→</span>
+                </button>
+              )}
 
               <p className="mt-3 text-center text-xs text-slate-400">
-                NFC wird bevorzugt · QR-Code als Alternative
+                QR-Code scannen · NFC direkt über den Tag im Lernraum
               </p>
             </div>
           </div>

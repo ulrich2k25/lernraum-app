@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type ActiveSession = {
   id: number;
@@ -54,9 +55,14 @@ function formatRemainingTime(expiresAt: string) {
 export default function ActiveSessionPanel({
   session,
 }: ActiveSessionPanelProps) {
+  const router = useRouter();
+
   const [remainingTime, setRemainingTime] = useState(
     formatRemainingTime(session.expiresAt),
   );
+
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [checkOutError, setCheckOutError] = useState<string | null>(null);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -67,6 +73,52 @@ export default function ActiveSessionPanel({
       window.clearInterval(interval);
     };
   }, [session.expiresAt]);
+
+  async function handleCheckOut() {
+    if (isCheckingOut) {
+      return;
+    }
+
+    setCheckOutError(null);
+
+    const clientId = localStorage.getItem("lernraum-client-id");
+
+    if (!clientId) {
+      setCheckOutError("Die Client-ID konnte nicht gefunden werden.");
+      return;
+    }
+
+    try {
+      setIsCheckingOut(true);
+
+      const response = await fetch("http://localhost:3002/sessions/check-out", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clientId,
+        }),
+      });
+
+      const text = await response.text();
+
+      const data = text ? JSON.parse(text) : null;
+
+      if (!response.ok) {
+        throw new Error(data?.message ?? "Check-out fehlgeschlagen.");
+      }
+
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      setCheckOutError(
+        error instanceof Error ? error.message : "Check-out fehlgeschlagen.",
+      );
+
+      setIsCheckingOut(false);
+    }
+  }
 
   return (
     <section className="overflow-hidden rounded-[26px] border border-[#D9E7EC] bg-white shadow-[0_12px_40px_rgba(15,42,67,0.08)] sm:rounded-[30px]">
@@ -121,10 +173,18 @@ export default function ActiveSessionPanel({
 
         <button
           type="button"
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#075985] px-5 py-3.5 font-bold text-white transition hover:bg-[#064B70]"
+          onClick={handleCheckOut}
+          disabled={isCheckingOut}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#075985] px-5 py-3.5 font-bold text-white transition hover:bg-[#064B70] disabled:cursor-not-allowed disabled:opacity-60"
         >
-          ⇥ Auschecken
+          {isCheckingOut ? "Auschecken..." : "⇥ Auschecken"}
         </button>
+
+        {checkOutError && (
+          <p className="mt-3 text-center text-sm font-medium text-red-600">
+            {checkOutError}
+          </p>
+        )}
       </div>
     </section>
   );

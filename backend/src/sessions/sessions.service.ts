@@ -7,6 +7,7 @@ import {
 
 import { PrismaService } from '../prisma/prisma.service';
 import { CheckInDto } from './dto/check-in.dto';
+import { CheckOutDto } from './dto/check-out.dto';
 
 const SESSION_DURATION_MINUTES = 120;
 
@@ -129,7 +130,7 @@ export class SessionsService {
       throw new BadRequestException('Client-ID fehlt.');
     }
 
-    const session = await this.prisma.session.findFirst({
+    return this.prisma.session.findFirst({
       where: {
         clientId: normalizedClientId,
         status: 'ACTIVE',
@@ -159,7 +160,86 @@ export class SessionsService {
         },
       },
     });
+  }
 
-    return session;
+  async checkOut(dto: CheckOutDto) {
+    const clientId = dto.clientId?.trim();
+
+    if (!clientId) {
+      throw new BadRequestException('Client-ID fehlt.');
+    }
+
+    const now = new Date();
+
+    return this.prisma.$transaction(async (tx) => {
+      const session = await tx.session.findFirst({
+        where: {
+          clientId,
+          status: 'ACTIVE',
+          expiresAt: {
+            gt: now,
+          },
+        },
+        include: {
+          lernraum: true,
+        },
+        orderBy: {
+          startedAt: 'desc',
+        },
+      });
+
+      if (!session) {
+        throw new NotFoundException('Keine aktive Sitzung gefunden.');
+      }
+
+      const endedSession = await tx.session.update({
+        where: {
+          id: session.id,
+        },
+        data: {
+          status: 'ENDED',
+          endedAt: now,
+        },
+        select: {
+          id: true,
+          status: true,
+          startedAt: true,
+          expiresAt: true,
+          endedAt: true,
+
+          lernraum: {
+            select: {
+              id: true,
+              raumBezeichnung: true,
+              gebaeude: true,
+              etage: true,
+              kapazitaet: true,
+              status: true,
+            },
+          },
+        },
+      });
+
+      const activeSessions = await tx.session.count({
+        where: {
+          lernraumId: session.lernraumId,
+          status: 'ACTIVE',
+          expiresAt: {
+            gt: now,
+          },
+        },
+      });
+
+      const freiePlaetze = Math.max(
+        session.lernraum.kapazitaet - activeSessions,
+        0,
+      );
+
+      return {
+        message: 'Check-out erfolgreich.',
+        session: endedSession,
+        freiePlaetze,
+      };
+    });
   }
 }

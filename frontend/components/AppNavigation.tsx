@@ -6,16 +6,20 @@ import { useEffect, useState } from "react";
 
 export default function AppNavigation() {
   const pathname = usePathname();
-
   const [hasActiveSession, setHasActiveSession] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function checkActiveSession() {
       try {
         const clientId = localStorage.getItem("lernraum-client-id");
 
         if (!clientId) {
-          setHasActiveSession(false);
+          if (!cancelled) {
+            setHasActiveSession(false);
+          }
+
           return;
         }
 
@@ -27,98 +31,108 @@ export default function AppNavigation() {
         );
 
         if (!response.ok) {
-          setHasActiveSession(false);
+          if (!cancelled) {
+            setHasActiveSession(false);
+          }
+
           return;
         }
 
-        const session = await response.json();
+        const text = await response.text();
 
-        setHasActiveSession(Boolean(session));
+        const session = text ? JSON.parse(text) : null;
+
+        if (!cancelled) {
+          setHasActiveSession(Boolean(session));
+        }
       } catch (error) {
-        console.error("Navigation session check error:", error);
-        setHasActiveSession(false);
+        console.error("Aktive Sitzung konnte nicht geprüft werden:", error);
+
+        if (!cancelled) {
+          setHasActiveSession(false);
+        }
       }
     }
 
-    void checkActiveSession();
+    checkActiveSession();
+
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
   const roomsActive = pathname === "/" || pathname.startsWith("/rooms");
 
   const sessionActive = pathname.startsWith("/session");
 
-  const activeClass = "bg-[#075985] text-white font-semibold shadow-sm";
-
-  const inactiveClass =
-    "text-slate-500 font-medium hover:bg-[#EDF7FA] hover:text-[#075985]";
-
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-3 py-3 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur md:static md:mb-7 md:rounded-2xl md:border md:px-2 md:py-2 md:shadow-sm">
-      <div className="mx-auto flex max-w-6xl items-center justify-around gap-1 md:justify-start md:gap-2">
-        {/* Lernräume */}
+    <>
+      <nav className="hidden items-center gap-2 rounded-2xl bg-white p-2 shadow-sm ring-1 ring-slate-200 md:flex">
         <Link
           href="/"
-          className={`flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2.5 text-xs transition sm:text-sm md:flex-none md:flex-row md:px-5 ${
-            roomsActive ? activeClass : inactiveClass
+          className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+            roomsActive
+              ? "bg-[#102A43] text-white"
+              : "text-slate-500 hover:bg-slate-100"
           }`}
         >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-          >
-            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a3 3 0 0 1 3 3v14a3 3 0 0 0-3-3H6.5A2.5 2.5 0 0 0 4 19.5v-14Z" />
-            <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H14v17a3 3 0 0 1 3-3h.5a2.5 2.5 0 0 1 2.5 2.5v-14Z" />
-          </svg>
-
-          <span>Lernräume</span>
+          Lernräume
         </Link>
 
-        {/* Aktuelle Sitzung – nur sichtbar bei aktiver Sitzung */}
         {hasActiveSession && (
           <Link
             href="/session"
-            className={`flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2.5 text-xs transition sm:text-sm md:flex-none md:flex-row md:px-5 ${
-              sessionActive ? activeClass : inactiveClass
+            className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
+              sessionActive
+                ? "bg-[#102A43] text-white"
+                : "text-slate-500 hover:bg-slate-100"
             }`}
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="h-4 w-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-            >
-              <circle cx="12" cy="12" r="8" />
-              <path d="M12 7v5l3 2" />
-            </svg>
-
-            <span>Aktuelle Sitzung</span>
+            Aktuelle Sitzung
           </Link>
         )}
 
-        {/* Besuche */}
         <button
           type="button"
-          className={`flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2.5 text-xs transition sm:text-sm md:flex-none md:flex-row md:px-5 ${inactiveClass}`}
+          className="rounded-xl px-4 py-2 text-sm font-semibold text-slate-500 transition hover:bg-slate-100"
         >
-          <svg
-            viewBox="0 0 24 24"
-            className="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-          >
-            <path d="M4 12a8 8 0 1 0 2.3-5.7" />
-            <path d="M4 4v5h5" />
-            <path d="M12 8v4l2.5 1.5" />
-          </svg>
-
-          <span>Besuche</span>
+          Besuche
         </button>
-      </div>
-    </nav>
+      </nav>
+
+      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 px-3 py-2 backdrop-blur md:hidden">
+        <div className="mx-auto flex max-w-md items-center justify-around">
+          <Link
+            href="/"
+            className={`flex min-w-20 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition ${
+              roomsActive ? "text-[#0F8B8D]" : "text-slate-400"
+            }`}
+          >
+            <span className="text-xl">⌂</span>
+            <span>Lernräume</span>
+          </Link>
+
+          {hasActiveSession && (
+            <Link
+              href="/session"
+              className={`flex min-w-20 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition ${
+                sessionActive ? "text-[#0F8B8D]" : "text-slate-400"
+              }`}
+            >
+              <span className="text-xl">◷</span>
+              <span>Sitzung</span>
+            </Link>
+          )}
+
+          <button
+            type="button"
+            className="flex min-w-20 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold text-slate-400"
+          >
+            <span className="text-xl">↻</span>
+            <span>Besuche</span>
+          </button>
+        </div>
+      </nav>
+    </>
   );
 }

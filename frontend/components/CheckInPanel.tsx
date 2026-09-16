@@ -43,6 +43,7 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
     let scannerControls: { stop: () => void } | undefined;
     let cancelled = false;
     let qrHandled = false;
+    let redirectTimeout: number | undefined;
 
     async function sendCheckIn(roomToken: string) {
       try {
@@ -64,25 +65,36 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
           },
         );
 
-        const data = await response.json();
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : null;
 
         if (!response.ok) {
           setMessage(
-            data.message ?? "Der Check-in konnte nicht durchgeführt werden.",
+            data?.message ?? "Der Check-in konnte nicht durchgeführt werden.",
           );
 
           setStatus("checkin-error");
           return;
         }
 
-        setMessage(data.message ?? "Check-in erfolgreich.");
-        setFreiePlaetze(data.freiePlaetze);
+        if (cancelled) {
+          return;
+        }
+
+        setMessage(data?.message ?? "Check-in erfolgreich.");
+        setFreiePlaetze(data?.freiePlaetze ?? null);
         setStatus("success");
+
+        redirectTimeout = window.setTimeout(() => {
+          window.location.href = "/session";
+        }, 4000);
       } catch (error) {
         console.error("Check-in error:", error);
 
-        setMessage("Der Server konnte nicht erreicht werden.");
-        setStatus("checkin-error");
+        if (!cancelled) {
+          setMessage("Der Server konnte nicht erreicht werden.");
+          setStatus("checkin-error");
+        }
       }
     }
 
@@ -133,11 +145,15 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
       }
     }
 
-    startScanner();
+    void startScanner();
 
     return () => {
       cancelled = true;
       scannerControls?.stop();
+
+      if (redirectTimeout !== undefined) {
+        window.clearTimeout(redirectTimeout);
+      }
     };
   }, [scanAttempt]);
 

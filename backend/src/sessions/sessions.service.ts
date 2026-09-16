@@ -33,7 +33,6 @@ export class SessionsService {
     );
 
     return this.prisma.$transaction(async (tx) => {
-      // 1. Raum anhand des QR-/NFC-Tokens finden
       const room = await tx.lernraum.findUnique({
         where: {
           raumToken: roomToken,
@@ -44,9 +43,6 @@ export class SessionsService {
         throw new NotFoundException('Ungültiger Raum-Token.');
       }
 
-      // 2. Raum für diesen Check-in sperren.
-      // Dadurch können zwei gleichzeitige Check-ins die Kapazität
-      // nicht unabhängig voneinander prüfen.
       await tx.$queryRaw`
         SELECT "id"
         FROM "Lernraum"
@@ -54,14 +50,12 @@ export class SessionsService {
         FOR UPDATE
       `;
 
-      // 3. Raum muss aktiv sein
       if (room.status !== 'ACTIVE') {
         throw new BadRequestException(
           'Dieser Lernraum ist derzeit nicht verfügbar.',
         );
       }
 
-      // 4. Prüfen, ob dieser Client bereits eine aktive Sitzung hat
       const existingSession = await tx.session.findFirst({
         where: {
           clientId,
@@ -70,19 +64,12 @@ export class SessionsService {
             gt: now,
           },
         },
-        select: {
-          id: true,
-          lernraumId: true,
-          startedAt: true,
-          expiresAt: true,
-        },
       });
 
       if (existingSession) {
         throw new ConflictException('Du hast bereits eine aktive Sitzung.');
       }
 
-      // 5. Aktuelle Belegung des Raums bestimmen
       const activeSessions = await tx.session.count({
         where: {
           lernraumId: room.id,
@@ -93,14 +80,12 @@ export class SessionsService {
         },
       });
 
-      // 6. Kapazität prüfen
       if (activeSessions >= room.kapazitaet) {
         throw new ConflictException(
           'In diesem Lernraum sind aktuell keine freien Plätze verfügbar.',
         );
       }
 
-      // 7. Neue Sitzung erstellen
       const session = await tx.session.create({
         data: {
           clientId,
@@ -135,5 +120,46 @@ export class SessionsService {
         freiePlaetze: room.kapazitaet - activeSessions - 1,
       };
     });
+  }
+
+  async findCurrent(clientId: string) {
+    const normalizedClientId = clientId?.trim();
+
+    if (!normalizedClientId) {
+      throw new BadRequestException('Client-ID fehlt.');
+    }
+
+    const session = await this.prisma.session.findFirst({
+      where: {
+        clientId: normalizedClientId,
+        status: 'ACTIVE',
+        expiresAt: {
+          gt: new Date(),
+        },
+      },
+      orderBy: {
+        startedAt: 'desc',
+      },
+      select: {
+        id: true,
+        status: true,
+        startedAt: true,
+        expiresAt: true,
+        endedAt: true,
+
+        lernraum: {
+          select: {
+            id: true,
+            raumBezeichnung: true,
+            gebaeude: true,
+            etage: true,
+            kapazitaet: true,
+            status: true,
+          },
+        },
+      },
+    });
+
+    return session;
   }
 }

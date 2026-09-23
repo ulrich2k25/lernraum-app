@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { BrowserQRCodeReader } from "@zxing/browser";
+import { getClientId } from "@/lib/client-id";
 
 import type { Room } from "../types/room";
 
@@ -18,17 +19,44 @@ type ScannerStatus =
   | "checkin-error"
   | "camera-error";
 
-function getClientId() {
-  const storageKey = "lernraum-client-id";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
-  let clientId = localStorage.getItem(storageKey);
+function extractRoomToken(qrContent: string): string | null {
+  const value = qrContent.trim();
 
-  if (!clientId) {
-    clientId = crypto.randomUUID();
-    localStorage.setItem(storageKey, clientId);
+  if (!value) {
+    return null;
   }
 
-  return clientId;
+  // Neuer QR-Code:
+  // https://.../check-in?roomToken=raum-a101
+  if (/^https?:\/\//i.test(value)) {
+    try {
+      const url = new URL(value);
+      const roomToken = url.searchParams.get("roomToken")?.trim();
+
+      return roomToken || null;
+    } catch {
+      return null;
+    }
+  }
+
+  // Relative URL ebenfalls unterstützen:
+  // /check-in?roomToken=raum-a101
+  if (value.startsWith("/")) {
+    try {
+      const url = new URL(value, window.location.origin);
+      const roomToken = url.searchParams.get("roomToken")?.trim();
+
+      return roomToken || null;
+    } catch {
+      return null;
+    }
+  }
+
+  // Alte QR-Codes weiterhin unterstützen:
+  // raum-a101
+  return value;
 }
 
 export default function CheckInPanel({ room }: CheckInPanelProps) {
@@ -51,22 +79,32 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
 
         const clientId = getClientId();
 
-        const response = await fetch(
-          "http://localhost:3002/sessions/check-in",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              roomToken,
-              clientId,
-            }),
+        const response = await fetch(`${API_URL}/sessions/check-in`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify({
+            roomToken,
+            roomId: room.id,
+            clientId,
+          }),
+        });
 
         const text = await response.text();
-        const data = text ? JSON.parse(text) : null;
+
+        let data: {
+          message?: string;
+          freiePlaetze?: number;
+        } | null = null;
+
+        if (text) {
+          try {
+            data = JSON.parse(text);
+          } catch {
+            data = null;
+          }
+        }
 
         if (!response.ok) {
           setMessage(
@@ -81,8 +119,15 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
           return;
         }
 
-        setMessage(data?.message ?? "Check-in erfolgreich.");
-        setFreiePlaetze(data?.freiePlaetze ?? null);
+        setMessage(
+          data?.message ??
+            `Check-in erfolgreich. Du bist jetzt in Raum ${room.raumBezeichnung} eingecheckt.`,
+        );
+
+        setFreiePlaetze(
+          typeof data?.freiePlaetze === "number" ? data.freiePlaetze : null,
+        );
+
         setStatus("success");
 
         redirectTimeout = window.setTimeout(() => {
@@ -100,6 +145,21 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
 
     async function startScanner() {
       if (!videoRef.current) {
+        return;
+      }
+
+      // Auf mobilen Browsern ist der Kamerazugriff über HTTP
+      // außerhalb von localhost nicht verfügbar.
+      // Deshalb prüfen wir die Camera API vor dem Start von ZXing.
+      if (
+        typeof navigator === "undefined" ||
+        !navigator.mediaDevices ||
+        typeof navigator.mediaDevices.getUserMedia !== "function"
+      ) {
+        if (!cancelled) {
+          setStatus("camera-error");
+        }
+
         return;
       }
 
@@ -123,9 +183,15 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
 
             qrHandled = true;
 
-            const roomToken = result.getText().trim();
+            const roomToken = extractRoomToken(result.getText());
 
             scannerControls?.stop();
+
+            if (!roomToken) {
+              setMessage("Der QR-Code enthält keinen gültigen Raumzugang.");
+              setStatus("checkin-error");
+              return;
+            }
 
             void sendCheckIn(roomToken);
           },
@@ -149,13 +215,14 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
 
     return () => {
       cancelled = true;
+
       scannerControls?.stop();
 
       if (redirectTimeout !== undefined) {
         window.clearTimeout(redirectTimeout);
       }
     };
-  }, [scanAttempt]);
+  }, [room.id, room.raumBezeichnung, scanAttempt]);
 
   function restartScanner() {
     setMessage(null);
@@ -271,7 +338,9 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-white/70">
-                  Bitte erlaube den Kamerazugriff und lade die Seite erneut.
+                  Bitte erlaube den Kamerazugriff. Für den QR-Scanner ist auf
+                  mobilen Geräten außerdem eine sichere HTTPS-Verbindung
+                  erforderlich.
                 </p>
               </div>
             </div>

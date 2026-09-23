@@ -23,6 +23,8 @@ type ActiveSessionPanelProps = {
   session: ActiveSession;
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
+
 function formatTime(value: string) {
   return new Intl.DateTimeFormat("de-DE", {
     hour: "2-digit",
@@ -91,7 +93,7 @@ export default function ActiveSessionPanel({
     try {
       setIsCheckingOut(true);
 
-      const response = await fetch("http://localhost:3002/sessions/check-out", {
+      const response = await fetch(`${API_URL}/sessions/check-out`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

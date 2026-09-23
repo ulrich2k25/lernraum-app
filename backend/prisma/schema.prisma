@@ -8,13 +8,15 @@ datasource db {
 }
 
 model Lernraum {
-  id              Int        @id @default(autoincrement())
-  raumBezeichnung String
-  gebaeude        String
-  etage           String
-  kapazitaet      Int
-  status          RaumStatus @default(ACTIVE)
-  raumToken       String     @unique
+  id                  Int        @id @default(autoincrement())
+  raumBezeichnung     String
+  gebaeude            String
+  etage               String
+  kapazitaet          Int
+  status              RaumStatus @default(ACTIVE)
+  raumToken           String     @unique
+  autoCloseWhenEmpty  Boolean    @default(false)
+  isTemporarilyClosed Boolean    @default(false)
 
   sessions Session[]
 }
@@ -34,6 +36,13 @@ model Session {
   @@index([lernraumId, status])
 }
 
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
 enum RaumStatus {
   ACTIVE
   INACTIVE

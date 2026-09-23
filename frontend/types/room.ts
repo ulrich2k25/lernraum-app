@@ -6,4 +6,5 @@ export type Room = {
   kapazitaet: number;
   status: string;
   freiePlaetze: number;
+  isTemporarilyClosed: boolean;
 };

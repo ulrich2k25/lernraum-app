@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 
 import { RoomsService } from './rooms.service';
 
@@ -11,13 +11,13 @@ export class RoomsController {
     return this.roomsService.findAll();
   }
 
+  @Get('by-token/:roomToken')
+  findByToken(@Param('roomToken') roomToken: string) {
+    return this.roomsService.findByToken(roomToken);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.roomsService.findOne(id);
-  }
-
-  @Post('test')
-  createTestRoom() {
-    return this.roomsService.createTestRoom();
   }
 }

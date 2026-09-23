@@ -11,9 +11,18 @@ export default function RoomCard({ room }: RoomCardProps) {
     <article className="group relative overflow-hidden rounded-[26px] border border-[#D9E7EC] bg-white p-5 shadow-[0_8px_30px_rgba(15,42,67,0.06)] transition duration-200 hover:-translate-y-1 hover:border-[#9CCFD3] hover:shadow-[0_16px_40px_rgba(15,42,67,0.12)] sm:p-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-[#E9FAF7] px-3 py-1.5 text-xs font-bold text-[#087F73]">
-            <span className="h-2 w-2 rounded-full bg-[#14B8A6]" />
-            Aktiv
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#E9FAF7] px-3 py-1.5 text-xs font-bold text-[#087F73]">
+              <span className="h-2 w-2 rounded-full bg-[#14B8A6]" />
+              Aktiv
+            </div>
+
+            {room.isTemporarilyClosed && (
+              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 ring-1 ring-amber-200">
+                <span className="h-2 w-2 rounded-full bg-amber-500" />
+                Derzeit geschlossen
+              </div>
+            )}
           </div>
 
           <h3 className="text-2xl font-bold tracking-tight text-[#102A43]">
@@ -29,7 +38,7 @@ export default function RoomCard({ room }: RoomCardProps) {
           href={`/rooms/${room.id}`}
           aria-label={`Details zu ${room.raumBezeichnung}`}
           title="Raumdetails öffnen"
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#EDF7FA] text-xl text-[#075985] transition duration-200 hover:bg-[#075985] hover:text-white hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#0F8B8D] focus:ring-offset-2"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#EDF7FA] text-xl text-[#075985] transition duration-200 hover:scale-105 hover:bg-[#075985] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#0F8B8D] focus:ring-offset-2"
         >
           →
         </Link>
@@ -59,7 +68,6 @@ export default function RoomCard({ room }: RoomCardProps) {
 
           <p className="mt-1 text-2xl font-bold text-[#102A43]">
             {room.kapazitaet}
-
             <span className="ml-1 text-sm font-medium text-slate-400">
               Plätze
             </span>

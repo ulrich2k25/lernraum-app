@@ -18,13 +18,20 @@ export class SessionsService {
   async checkIn(dto: CheckInDto) {
     const roomToken = dto.roomToken?.trim();
     const clientId = dto.clientId?.trim();
+    const roomId = dto.roomId;
 
     if (!roomToken) {
-      throw new BadRequestException('Room-Token fehlt.');
+      throw new BadRequestException('Ungültiger QR-Code.');
+    }
+
+    if (!Number.isInteger(roomId) || roomId <= 0) {
+      throw new BadRequestException('Der ausgewählte Lernraum ist ungültig.');
     }
 
     if (!clientId) {
-      throw new BadRequestException('Client-ID fehlt.');
+      throw new BadRequestException(
+        'Die Sitzung konnte nicht eindeutig zugeordnet werden.',
+      );
     }
 
     const now = new Date();
@@ -34,26 +41,42 @@ export class SessionsService {
     );
 
     return this.prisma.$transaction(async (tx) => {
-      const room = await tx.lernraum.findUnique({
+      const roomByToken = await tx.lernraum.findUnique({
         where: {
           raumToken: roomToken,
         },
       });
 
-      if (!room) {
-        throw new NotFoundException('Ungültiger Raum-Token.');
+      if (!roomByToken) {
+        throw new NotFoundException('Ungültiger QR-Code.');
+      }
+
+      if (roomByToken.id !== roomId) {
+        throw new BadRequestException(
+          'Der gescannte QR-Code gehört nicht zu diesem Lernraum.',
+        );
       }
 
       await tx.$queryRaw`
         SELECT "id"
         FROM "Lernraum"
-        WHERE "id" = ${room.id}
+        WHERE "id" = ${roomId}
         FOR UPDATE
       `;
 
+      const room = await tx.lernraum.findUnique({
+        where: {
+          id: roomId,
+        },
+      });
+
+      if (!room) {
+        throw new NotFoundException('Der Lernraum wurde nicht gefunden.');
+      }
+
       if (room.status !== 'ACTIVE') {
         throw new BadRequestException(
-          'Dieser Lernraum ist derzeit nicht verfügbar.',
+          'Dieser Lernraum ist derzeit nicht aktiv.',
         );
       }
 
@@ -68,7 +91,9 @@ export class SessionsService {
       });
 
       if (existingSession) {
-        throw new ConflictException('Du hast bereits eine aktive Sitzung.');
+        throw new ConflictException(
+          'Du hast bereits eine aktive Sitzung. Bitte checke zuerst aus.',
+        );
       }
 
       const activeSessions = await tx.session.count({
@@ -82,9 +107,7 @@ export class SessionsService {
       });
 
       if (activeSessions >= room.kapazitaet) {
-        throw new ConflictException(
-          'In diesem Lernraum sind aktuell keine freien Plätze verfügbar.',
-        );
+        throw new ConflictException('Dieser Lernraum ist bereits voll.');
       }
 
       const session = await tx.session.create({
@@ -115,8 +138,19 @@ export class SessionsService {
         },
       });
 
+      if (room.autoCloseWhenEmpty && room.isTemporarilyClosed) {
+        await tx.lernraum.update({
+          where: {
+            id: room.id,
+          },
+          data: {
+            isTemporarilyClosed: false,
+          },
+        });
+      }
+
       return {
-        message: 'Check-in erfolgreich.',
+        message: `Check-in erfolgreich. Du bist jetzt in Raum ${room.raumBezeichnung} eingecheckt.`,
         session,
         freiePlaetze: room.kapazitaet - activeSessions - 1,
       };
@@ -127,7 +161,9 @@ export class SessionsService {
     const normalizedClientId = clientId?.trim();
 
     if (!normalizedClientId) {
-      throw new BadRequestException('Client-ID fehlt.');
+      throw new BadRequestException(
+        'Die Sitzung konnte nicht eindeutig zugeordnet werden.',
+      );
     }
 
     return this.prisma.session.findFirst({
@@ -166,7 +202,9 @@ export class SessionsService {
     const clientId = dto.clientId?.trim();
 
     if (!clientId) {
-      throw new BadRequestException('Client-ID fehlt.');
+      throw new BadRequestException(
+        'Die Sitzung konnte nicht eindeutig zugeordnet werden.',
+      );
     }
 
     const now = new Date();
@@ -191,6 +229,13 @@ export class SessionsService {
       if (!session) {
         throw new NotFoundException('Keine aktive Sitzung gefunden.');
       }
+
+      await tx.$queryRaw`
+        SELECT "id"
+        FROM "Lernraum"
+        WHERE "id" = ${session.lernraumId}
+        FOR UPDATE
+      `;
 
       const endedSession = await tx.session.update({
         where: {
@@ -229,6 +274,17 @@ export class SessionsService {
           },
         },
       });
+
+      if (session.lernraum.autoCloseWhenEmpty && activeSessions === 0) {
+        await tx.lernraum.update({
+          where: {
+            id: session.lernraumId,
+          },
+          data: {
+            isTemporarilyClosed: true,
+          },
+        });
+      }
 
       const freiePlaetze = Math.max(
         session.lernraum.kapazitaet - activeSessions,

@@ -20,6 +20,8 @@ type ActiveSession = {
   };
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
+
 export default function CurrentSession() {
   const [session, setSession] = useState<ActiveSession | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,6 +30,8 @@ export default function CurrentSession() {
   useEffect(() => {
     async function loadCurrentSession() {
       try {
+        setError(null);
+
         const clientId = localStorage.getItem("lernraum-client-id");
 
         if (!clientId) {
@@ -36,7 +40,7 @@ export default function CurrentSession() {
         }
 
         const response = await fetch(
-          `http://localhost:3002/sessions/current/${clientId}`,
+          `${API_URL}/sessions/current/${encodeURIComponent(clientId)}`,
           {
             cache: "no-store",
           },
@@ -46,7 +50,14 @@ export default function CurrentSession() {
           throw new Error("Die aktuelle Sitzung konnte nicht geladen werden.");
         }
 
-        const data: ActiveSession | null = await response.json();
+        const text = await response.text();
+
+        if (!text) {
+          setSession(null);
+          return;
+        }
+
+        const data = JSON.parse(text) as ActiveSession | null;
 
         setSession(data);
       } catch (error) {

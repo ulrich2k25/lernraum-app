@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
+
 export default function AppNavigation() {
   const pathname = usePathname();
   const [hasActiveSession, setHasActiveSession] = useState(false);
@@ -24,7 +26,7 @@ export default function AppNavigation() {
         }
 
         const response = await fetch(
-          `http://localhost:3002/sessions/current/${clientId}`,
+          `${API_URL}/sessions/current/${encodeURIComponent(clientId)}`,
           {
             cache: "no-store",
           },
@@ -54,7 +56,7 @@ export default function AppNavigation() {
       }
     }
 
-    checkActiveSession();
+    void checkActiveSession();
 
     return () => {
       cancelled = true;

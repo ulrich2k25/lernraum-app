@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+
+import AdminRoomQrCode from "@/components/AdminRoomQrCode";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
@@ -26,6 +28,7 @@ export default function AdminRoomsPage() {
   const [rooms, setRooms] = useState<AdminRoom[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedQrRoomId, setSelectedQrRoomId] = useState<number | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("lernraum-admin-token");
@@ -76,6 +79,12 @@ export default function AdminRoomsPage() {
     localStorage.removeItem("lernraum-admin");
 
     router.push("/admin/login");
+  }
+
+  function toggleQrCode(roomId: number) {
+    setSelectedQrRoomId((currentRoomId) =>
+      currentRoomId === roomId ? null : roomId,
+    );
   }
 
   return (
@@ -188,7 +197,7 @@ export default function AdminRoomsPage() {
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-[#F4F8FA] p-4">
+                  <div className="col-span-2 rounded-2xl bg-[#F4F8FA] p-4">
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                       Aktive Sitzungen
                     </p>
@@ -197,34 +206,17 @@ export default function AdminRoomsPage() {
                       {room.aktiveSitzungen}
                     </p>
                   </div>
-
-                  <div className="rounded-2xl bg-[#F4F8FA] p-4">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                      Raum-ID
-                    </p>
-
-                    <p className="mt-1 text-xl font-bold text-slate-900">
-                      #{room.id}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-5 rounded-2xl border border-slate-200 p-4">
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-                    Raum-Token
-                  </p>
-
-                  <p className="break-all font-mono text-xs text-slate-600">
-                    {room.raumToken}
-                  </p>
                 </div>
 
                 <div className="mt-5 flex gap-3">
                   <button
                     type="button"
+                    onClick={() => toggleQrCode(room.id)}
                     className="flex-1 rounded-xl border border-[#075985] px-4 py-3 text-sm font-semibold text-[#075985] transition hover:bg-[#075985]/5"
                   >
-                    QR-Code
+                    {selectedQrRoomId === room.id
+                      ? "QR-Code schließen"
+                      : "QR-Code"}
                   </button>
 
                   <button
@@ -234,6 +226,17 @@ export default function AdminRoomsPage() {
                     Bearbeiten
                   </button>
                 </div>
+
+                {selectedQrRoomId === room.id && (
+                  <div className="mt-5">
+                    <AdminRoomQrCode
+                      raumBezeichnung={room.raumBezeichnung}
+                      gebaeude={room.gebaeude}
+                      etage={room.etage}
+                      raumToken={room.raumToken}
+                    />
+                  </div>
+                )}
               </article>
             ))}
           </section>

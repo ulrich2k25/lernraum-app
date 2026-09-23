@@ -241,6 +241,10 @@ export default function AdminRoomsPage() {
             ))}
           </section>
         )}
+
+        <footer className="mt-10 border-t border-slate-200 pt-6 text-center text-xs text-slate-400">
+          Projekt 1 · Hochschule Kaiserslautern
+        </footer>
       </div>
     </main>
   );

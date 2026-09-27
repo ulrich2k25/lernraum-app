@@ -7,15 +7,62 @@ import {
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { PrismaService } from '../prisma/prisma.service';
+import { PushNotificationsService } from '../push-notifications/push-notifications.service';
 import { CheckInDto } from './dto/check-in.dto';
 import { CheckOutDto } from './dto/check-out.dto';
 import { ExtendSessionDto } from './dto/extend-session.dto';
 
 const SESSION_DURATION_MINUTES = 120;
+const REMINDER_MINUTES_BEFORE_EXPIRY = 10;
 
 @Injectable()
 export class SessionsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly pushNotificationsService: PushNotificationsService,
+  ) {}
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  async sendSessionReminders() {
+    const now = new Date();
+
+    const reminderWindowEnd = new Date(
+      now.getTime() + REMINDER_MINUTES_BEFORE_EXPIRY * 60 * 1000,
+    );
+
+    const sessions = await this.prisma.session.findMany({
+      where: {
+        status: 'ACTIVE',
+        reminderSentAt: null,
+        expiresAt: {
+          gt: now,
+          lte: reminderWindowEnd,
+        },
+      },
+      include: {
+        lernraum: true,
+      },
+    });
+
+    for (const session of sessions) {
+      const result = await this.pushNotificationsService.sendSessionReminder(
+        session.clientId,
+        session.lernraum.raumBezeichnung,
+        session.expiresAt,
+      );
+
+      if (result.sent > 0) {
+        await this.prisma.session.update({
+          where: {
+            id: session.id,
+          },
+          data: {
+            reminderSentAt: new Date(),
+          },
+        });
+      }
+    }
+  }
 
   @Cron(CronExpression.EVERY_MINUTE)
   async closeExpiredSessions() {
@@ -290,6 +337,7 @@ export class SessionsService {
       },
       data: {
         expiresAt: newExpiresAt,
+        reminderSentAt: null,
       },
       select: {
         id: true,

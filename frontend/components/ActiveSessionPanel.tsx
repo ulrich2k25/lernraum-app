@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { enablePushNotifications } from "@/lib/push-notifications";
+
 type ActiveSession = {
   id: number;
   status: string;
@@ -59,22 +61,184 @@ export default function ActiveSessionPanel({
 }: ActiveSessionPanelProps) {
   const router = useRouter();
 
+  const [expiresAt, setExpiresAt] = useState(session.expiresAt);
+
   const [remainingTime, setRemainingTime] = useState(
     formatRemainingTime(session.expiresAt),
   );
 
+  const [isExtending, setIsExtending] = useState(false);
+  const [extendError, setExtendError] = useState<string | null>(null);
+  const [extendSuccess, setExtendSuccess] = useState<string | null>(null);
+
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkOutError, setCheckOutError] = useState<string | null>(null);
 
+  const [isCheckingNotificationState, setIsCheckingNotificationState] =
+    useState(true);
+
+  const [isEnablingNotifications, setIsEnablingNotifications] = useState(false);
+
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+  const [notificationSuccess, setNotificationSuccess] = useState<string | null>(
+    null,
+  );
+
+  const [notificationError, setNotificationError] = useState<string | null>(
+    null,
+  );
+
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setRemainingTime(formatRemainingTime(session.expiresAt));
+      setRemainingTime(formatRemainingTime(expiresAt));
     }, 30000);
 
     return () => {
       window.clearInterval(interval);
     };
-  }, [session.expiresAt]);
+  }, [expiresAt]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkNotificationState() {
+      try {
+        if (
+          !("serviceWorker" in navigator) ||
+          !("PushManager" in window) ||
+          !("Notification" in window)
+        ) {
+          return;
+        }
+
+        if (Notification.permission !== "granted") {
+          return;
+        }
+
+        const registration = await navigator.serviceWorker.register("/sw.js");
+
+        await navigator.serviceWorker.ready;
+
+        const subscription = await registration.pushManager.getSubscription();
+
+        if (!cancelled && subscription) {
+          setNotificationsEnabled(true);
+        }
+      } catch (error) {
+        console.error("Notification state check failed:", error);
+      } finally {
+        if (!cancelled) {
+          setIsCheckingNotificationState(false);
+        }
+      }
+    }
+
+    void checkNotificationState();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function handleEnableNotifications() {
+    if (isEnablingNotifications || notificationsEnabled) {
+      return;
+    }
+
+    setNotificationError(null);
+    setNotificationSuccess(null);
+
+    const clientId = localStorage.getItem("lernraum-client-id");
+
+    if (!clientId) {
+      setNotificationError("Die Client-ID konnte nicht gefunden werden.");
+      return;
+    }
+
+    try {
+      setIsEnablingNotifications(true);
+
+      await enablePushNotifications(clientId);
+
+      setNotificationsEnabled(true);
+
+      setNotificationSuccess("Benachrichtigungen wurden aktiviert.");
+
+      window.setTimeout(() => {
+        setNotificationSuccess(null);
+      }, 3000);
+    } catch (error) {
+      setNotificationError(
+        error instanceof Error
+          ? error.message
+          : "Benachrichtigungen konnten nicht aktiviert werden.",
+      );
+    } finally {
+      setIsEnablingNotifications(false);
+    }
+  }
+
+  async function handleExtend() {
+    if (isExtending) {
+      return;
+    }
+
+    setExtendError(null);
+    setExtendSuccess(null);
+
+    const clientId = localStorage.getItem("lernraum-client-id");
+
+    if (!clientId) {
+      setExtendError("Die Client-ID konnte nicht gefunden werden.");
+      return;
+    }
+
+    try {
+      setIsExtending(true);
+
+      const response = await fetch(`${API_URL}/sessions/extend`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          clientId,
+        }),
+      });
+
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : null;
+
+      if (!response.ok) {
+        throw new Error(
+          data?.message ?? "Der Aufenthalt konnte nicht verlängert werden.",
+        );
+      }
+
+      if (!data?.session?.expiresAt) {
+        throw new Error("Die neue Sitzungsdauer konnte nicht geladen werden.");
+      }
+
+      setExpiresAt(data.session.expiresAt);
+
+      setRemainingTime(formatRemainingTime(data.session.expiresAt));
+
+      setExtendSuccess(data?.message ?? "Aufenthalt erfolgreich verlängert.");
+
+      window.setTimeout(() => {
+        setExtendSuccess(null);
+      }, 3000);
+    } catch (error) {
+      setExtendError(
+        error instanceof Error
+          ? error.message
+          : "Der Aufenthalt konnte nicht verlängert werden.",
+      );
+    } finally {
+      setIsExtending(false);
+    }
+  }
 
   async function handleCheckOut() {
     if (isCheckingOut) {
@@ -104,7 +268,6 @@ export default function ActiveSessionPanel({
       });
 
       const text = await response.text();
-
       const data = text ? JSON.parse(text) : null;
 
       if (!response.ok) {
@@ -153,7 +316,7 @@ export default function ActiveSessionPanel({
             <span className="text-sm text-slate-500">Automatisches Ende</span>
 
             <span className="text-sm font-bold text-[#102A43]">
-              {formatTime(session.expiresAt)} Uhr
+              {formatTime(expiresAt)} Uhr
             </span>
           </div>
 
@@ -166,17 +329,75 @@ export default function ActiveSessionPanel({
           </div>
         </div>
 
+        {!isCheckingNotificationState && !notificationsEnabled && (
+          <div className="mt-5 rounded-2xl border border-[#D9E7EC] bg-[#F7FBFC] p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E5F5F5] text-lg">
+                🔔
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <p className="font-bold text-[#102A43]">
+                  Erinnerung vor Sitzungsende
+                </p>
+
+                <p className="mt-1 text-sm leading-5 text-slate-500">
+                  Erhalte 10 Minuten vor dem automatischen Ende eine
+                  Benachrichtigung.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleEnableNotifications}
+              disabled={isEnablingNotifications || isCheckingOut}
+              className="mt-4 flex w-full items-center justify-center rounded-xl border border-[#075985] bg-white px-4 py-3 text-sm font-bold text-[#075985] transition hover:bg-[#EDF7FA] disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {isEnablingNotifications
+                ? "Wird aktiviert..."
+                : "Benachrichtigungen aktivieren"}
+            </button>
+
+            {notificationError && (
+              <p className="mt-3 text-center text-sm font-medium text-red-600">
+                {notificationError}
+              </p>
+            )}
+          </div>
+        )}
+
+        {notificationSuccess && (
+          <p className="mt-4 text-center text-sm font-medium text-emerald-700">
+            {notificationSuccess}
+          </p>
+        )}
+
         <button
           type="button"
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl border border-[#075985] bg-white px-5 py-3.5 font-bold text-[#075985] transition hover:bg-[#EDF7FA]"
+          onClick={handleExtend}
+          disabled={isExtending || isCheckingOut}
+          className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl border border-[#075985] bg-white px-5 py-3.5 font-bold text-[#075985] transition hover:bg-[#EDF7FA] disabled:cursor-not-allowed disabled:opacity-60"
         >
-          ↻ Aufenthalt verlängern
+          {isExtending ? "Wird verlängert..." : "↻ Aufenthalt verlängern"}
         </button>
+
+        {extendSuccess && (
+          <p className="mt-3 text-center text-sm font-medium text-emerald-700">
+            {extendSuccess}
+          </p>
+        )}
+
+        {extendError && (
+          <p className="mt-3 text-center text-sm font-medium text-red-600">
+            {extendError}
+          </p>
+        )}
 
         <button
           type="button"
           onClick={handleCheckOut}
-          disabled={isCheckingOut}
+          disabled={isCheckingOut || isExtending}
           className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#075985] px-5 py-3.5 font-bold text-white transition hover:bg-[#064B70] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isCheckingOut ? "Auschecken..." : "⇥ Auschecken"}

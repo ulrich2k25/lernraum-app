@@ -371,11 +371,13 @@ export default function EditAdminRoomPage() {
 
               <span>
                 <span className="block text-sm font-semibold text-slate-800">
-                  Raum automatisch schließen, wenn er leer ist
+                  Automatisch als geschlossen anzeigen, wenn niemand eingecheckt
+                  ist
                 </span>
 
                 <span className="mt-1 block text-xs leading-5 text-slate-500">
-                  Diese Einstellung kann jederzeit geändert werden.
+                  Beim ersten Check-in wird die Kennzeichnung automatisch
+                  entfernt.
                 </span>
               </span>
             </label>

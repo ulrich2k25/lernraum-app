@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 
 import type { Room } from "../types/room";
@@ -18,9 +19,25 @@ export default function RoomCard({ room }: RoomCardProps) {
             </div>
 
             {room.isTemporarilyClosed && (
-              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 ring-1 ring-amber-200">
+              <div className="relative inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 ring-1 ring-amber-200">
                 <span className="h-2 w-2 rounded-full bg-amber-500" />
-                Derzeit geschlossen
+
+                <span>Der Raum ist derzeit geschlossen</span>
+
+                <button
+                  type="button"
+                  aria-label="Information zum Raumstatus"
+                  onMouseLeave={(event) => event.currentTarget.blur()}
+                  className="group/info relative flex h-5 w-5 items-center justify-center rounded-full text-sm font-semibold text-amber-600 outline-none"
+                >
+                  ⓘ
+                  <span
+                    role="tooltip"
+                    className="pointer-events-none absolute left-1/2 top-full z-20 mt-3 w-64 -translate-x-1/2 rounded-xl bg-[#102A43] px-3 py-2 text-center text-xs font-medium leading-5 text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover/info:opacity-100 group-focus/info:opacity-100"
+                  >
+                    Dieser Raum ist aktuell nicht frei zugänglich.
+                  </span>
+                </button>
               </div>
             )}
           </div>

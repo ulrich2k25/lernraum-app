@@ -323,7 +323,10 @@ export class RoomsService {
         `Lernraum ${raumBezeichnung} existiert bereits.`,
       );
     }
+    const autoCloseWhenEmpty =
+      data.autoCloseWhenEmpty ?? room.autoCloseWhenEmpty;
 
+    const isTemporarilyClosed = autoCloseWhenEmpty && aktiveSitzungen === 0;
     return this.prisma.lernraum.update({
       where: {
         id,
@@ -333,9 +336,8 @@ export class RoomsService {
         gebaeude,
         etage,
         kapazitaet,
-        ...(data.autoCloseWhenEmpty !== undefined && {
-          autoCloseWhenEmpty: data.autoCloseWhenEmpty,
-        }),
+        autoCloseWhenEmpty,
+        isTemporarilyClosed,
       },
       select: {
         id: true,

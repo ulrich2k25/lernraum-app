@@ -12,6 +12,7 @@ import {
 import { AdminJwtGuard } from '../admin-auth/admin-jwt.guard';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { RoomsService } from './rooms.service';
+import { UpdateRoomDto } from './dto/update-room.dto';
 
 @UseGuards(AdminJwtGuard)
 @Controller('admin/rooms')
@@ -26,6 +27,13 @@ export class AdminRoomsController {
   @Post()
   create(@Body() dto: CreateRoomDto) {
     return this.roomsService.createRoom(dto);
+  }
+  @Patch(':id')
+  updateRoom(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateRoomDto,
+  ) {
+    return this.roomsService.updateRoom(id, dto);
   }
 
   @Patch(':id/status')

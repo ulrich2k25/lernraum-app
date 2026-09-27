@@ -219,12 +219,12 @@ export default function AdminRoomsPage() {
                       : "QR-Code"}
                   </button>
 
-                  <button
-                    type="button"
-                    className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  <Link
+                    href={`/admin/rooms/${room.id}/edit`}
+                    className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                   >
                     Bearbeiten
-                  </button>
+                  </Link>
                 </div>
 
                 {selectedQrRoomId === room.id && (

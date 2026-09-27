@@ -16,6 +16,14 @@ type CreateRoomData = {
   autoCloseWhenEmpty?: boolean;
 };
 
+type UpdateRoomData = {
+  raumBezeichnung?: string;
+  gebaeude?: string;
+  etage?: string;
+  kapazitaet?: number;
+  autoCloseWhenEmpty?: boolean;
+};
+
 @Injectable()
 export class RoomsService {
   constructor(private readonly prisma: PrismaService) {}
@@ -248,7 +256,100 @@ export class RoomsService {
       },
     });
   }
+  async updateRoom(id: number, data: UpdateRoomData) {
+    const room = await this.prisma.lernraum.findUnique({
+      where: {
+        id,
+      },
+    });
 
+    if (!room) {
+      throw new NotFoundException(
+        `Lernraum mit ID ${id} wurde nicht gefunden.`,
+      );
+    }
+
+    const raumBezeichnung =
+      data.raumBezeichnung !== undefined
+        ? data.raumBezeichnung.trim()
+        : room.raumBezeichnung;
+
+    const gebaeude =
+      data.gebaeude !== undefined ? data.gebaeude.trim() : room.gebaeude;
+
+    const etage = data.etage !== undefined ? data.etage.trim() : room.etage;
+
+    const kapazitaet =
+      data.kapazitaet !== undefined ? data.kapazitaet : room.kapazitaet;
+
+    if (!raumBezeichnung || !gebaeude || !etage) {
+      throw new BadRequestException(
+        'Raumbezeichnung, Gebäude und Etage dürfen nicht leer sein.',
+      );
+    }
+
+    if (!Number.isInteger(kapazitaet) || kapazitaet <= 0) {
+      throw new BadRequestException('Die Kapazität muss größer als 0 sein.');
+    }
+
+    const aktiveSitzungen = await this.prisma.session.count({
+      where: {
+        lernraumId: id,
+        status: 'ACTIVE',
+        expiresAt: {
+          gt: new Date(),
+        },
+      },
+    });
+
+    if (kapazitaet < aktiveSitzungen) {
+      throw new BadRequestException(
+        `Die Kapazität darf nicht kleiner als die Anzahl aktiver Sitzungen (${aktiveSitzungen}) sein.`,
+      );
+    }
+
+    const duplicateRoom = await this.prisma.lernraum.findFirst({
+      where: {
+        raumBezeichnung,
+        gebaeude,
+        id: {
+          not: id,
+        },
+      },
+    });
+
+    if (duplicateRoom) {
+      throw new ConflictException(
+        `Lernraum ${raumBezeichnung} existiert bereits.`,
+      );
+    }
+
+    return this.prisma.lernraum.update({
+      where: {
+        id,
+      },
+      data: {
+        raumBezeichnung,
+        gebaeude,
+        etage,
+        kapazitaet,
+        ...(data.autoCloseWhenEmpty !== undefined && {
+          autoCloseWhenEmpty: data.autoCloseWhenEmpty,
+        }),
+      },
+      select: {
+        id: true,
+        raumBezeichnung: true,
+        gebaeude: true,
+        etage: true,
+        kapazitaet: true,
+        status: true,
+        raumToken: true,
+        autoCloseWhenEmpty: true,
+        isTemporarilyClosed: true,
+      },
+    });
+  }
   async updateStatus(id: number, status: 'ACTIVE' | 'INACTIVE') {
     if (status !== 'ACTIVE' && status !== 'INACTIVE') {
       throw new BadRequestException('Ungültiger Raumstatus.');

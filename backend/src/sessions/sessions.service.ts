@@ -4,16 +4,70 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { CheckInDto } from './dto/check-in.dto';
 import { CheckOutDto } from './dto/check-out.dto';
+import { ExtendSessionDto } from './dto/extend-session.dto';
 
 const SESSION_DURATION_MINUTES = 120;
 
 @Injectable()
 export class SessionsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  async closeExpiredSessions() {
+    const now = new Date();
+
+    const expiredSessions = await this.prisma.session.findMany({
+      where: {
+        status: 'ACTIVE',
+        expiresAt: {
+          lte: now,
+        },
+      },
+      include: {
+        lernraum: true,
+      },
+    });
+
+    for (const session of expiredSessions) {
+      await this.prisma.$transaction(async (tx) => {
+        await tx.session.update({
+          where: {
+            id: session.id,
+          },
+          data: {
+            status: 'ENDED',
+            endedAt: now,
+          },
+        });
+
+        const activeSessions = await tx.session.count({
+          where: {
+            lernraumId: session.lernraumId,
+            status: 'ACTIVE',
+            expiresAt: {
+              gt: now,
+            },
+          },
+        });
+
+        if (session.lernraum.autoCloseWhenEmpty && activeSessions === 0) {
+          await tx.lernraum.update({
+            where: {
+              id: session.lernraumId,
+            },
+            data: {
+              isTemporarilyClosed: true,
+            },
+          });
+        }
+      });
+    }
+  }
 
   async checkIn(dto: CheckInDto) {
     const roomToken = dto.roomToken?.trim();
@@ -196,6 +250,71 @@ export class SessionsService {
         },
       },
     });
+  }
+
+  async extendSession(dto: ExtendSessionDto) {
+    const clientId = dto.clientId?.trim();
+
+    if (!clientId) {
+      throw new BadRequestException(
+        'Die Sitzung konnte nicht eindeutig zugeordnet werden.',
+      );
+    }
+
+    const now = new Date();
+
+    const session = await this.prisma.session.findFirst({
+      where: {
+        clientId,
+        status: 'ACTIVE',
+        expiresAt: {
+          gt: now,
+        },
+      },
+      orderBy: {
+        startedAt: 'desc',
+      },
+    });
+
+    if (!session) {
+      throw new NotFoundException('Keine aktive Sitzung gefunden.');
+    }
+
+    const newExpiresAt = new Date(
+      session.expiresAt.getTime() + SESSION_DURATION_MINUTES * 60 * 1000,
+    );
+
+    const updatedSession = await this.prisma.session.update({
+      where: {
+        id: session.id,
+      },
+      data: {
+        expiresAt: newExpiresAt,
+      },
+      select: {
+        id: true,
+        status: true,
+        startedAt: true,
+        expiresAt: true,
+        endedAt: true,
+
+        lernraum: {
+          select: {
+            id: true,
+            raumBezeichnung: true,
+            gebaeude: true,
+            etage: true,
+            kapazitaet: true,
+            status: true,
+          },
+        },
+      },
+    });
+
+    return {
+      message: 'Aufenthalt erfolgreich um 120 Minuten verlängert.',
+      session: updatedSession,
+    };
   }
 
   async checkOut(dto: CheckOutDto) {

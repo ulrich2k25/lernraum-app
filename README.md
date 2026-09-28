@@ -2,279 +2,269 @@
 
 Webanwendung zur schnellen Suche nach verfügbaren Lernräumen an der Hochschule Kaiserslautern.
 
-Das Projekt entsteht im Rahmen von **Projekt 1** im Studiengang Wirtschaftsinformatik. Ziel ist es, Studierenden eine einfache Möglichkeit zu geben, verfügbare Lernräume und freie Plätze zu finden, ohne mehrere Räume vor Ort überprüfen zu müssen.
+Das Projekt entsteht im Rahmen von **Projekt 1** im Studiengang Wirtschaftsinformatik. Ziel ist es, Studierenden eine einfache und mobile Möglichkeit zu geben, verfügbare Lernräume und freie Plätze zu finden und sich direkt vor Ort einzuchecken.
 
 ## Projektziel
 
-Die Anwendung soll Studierenden ermöglichen, schnell einen verfügbaren Lernraum zu finden und mit möglichst wenig Aufwand eine Sitzung zu starten.
+Studierende sollen innerhalb kurzer Zeit erkennen können, welche Lernräume aktuell verfügbar sind und wie viele freie Plätze dort noch vorhanden sind.
 
-Der zentrale Nutzungsablauf ist:
+Der Check-in soll möglichst einfach, mobil und ohne verpflichtende Registrierung funktionieren.
+
+Ein typischer Nutzungsablauf ist:
 
 ```text
-Lernräume
-    ↓
-Raumdetails
-    ↓
+Lernraum auswählen
+        ↓
+Raumdetails anzeigen
+        ↓
 QR-Code scannen
-    ↓
+        ↓
 Check-in
-    ↓
+        ↓
 Aktive Sitzung
-    ↓
+        ↓
 Check-out
-```
 
-Die Anzahl der freien Plätze wird dynamisch anhand der aktuell aktiven Sitzungen berechnet.
+Alternativ kann der QR-Code eines Lernraums direkt mit der normalen Smartphone-Kamera gescannt werden.
 
-## Aktueller Stand
+Hauptfunktionen
+Lernräume
+Übersicht verfügbarer Lernräume
+Anzeige von Raumbezeichnung, Gebäude, Etage, Kapazität und freien Plätzen
+Raumdetailseiten
+dynamische Berechnung freier Plätze anhand aktiver Sitzungen
+Unterstützung unterschiedlicher Raumstatus
+Check-in
 
-Die technische Grundstruktur sowie der erste vollständige Nutzungsablauf sind implementiert.
+Es stehen zwei Check-in-Möglichkeiten zur Verfügung:
 
-Der aktuelle Datenfluss ist:
+QR-Code-Scanner innerhalb der Lernraum-Anwendung
+direkter Scan des Raum-QR-Codes mit der Smartphone-Kamera
 
-```text
-PostgreSQL
-    ↓
-Prisma ORM
-    ↓
-NestJS Backend
-    ↓
-REST API
-    ↓
-Next.js Frontend
-    ↓
-Browser
-```
+Jeder Lernraum besitzt einen eindeutigen Raum-Token.
 
-Lernraum- und Sitzungsdaten werden in PostgreSQL gespeichert, über Prisma im NestJS-Backend verarbeitet und über REST-Endpunkte an das Next.js-Frontend übertragen.
+Beim Check-in prüft das Backend unter anderem:
 
-## Technologien
+ob der Raum existiert
+ob der Raum aktiv ist
+ob der Raum-Token gültig ist
+ob noch freie Plätze vorhanden sind
+ob bereits eine aktive Sitzung für den Nutzer besteht
 
-### Frontend
+Nach erfolgreichem Check-in wird der Nutzer automatisch zu seiner aktiven Sitzung weitergeleitet.
 
-- Next.js
-- TypeScript
-- Tailwind CSS
+Sitzungsverwaltung
 
-### Backend
+Eine aktive Sitzung enthält unter anderem:
 
-- NestJS
-- TypeScript
-- Prisma ORM
+Lernraum
+Gebäude und Etage
+Check-in-Zeit
+automatisches Sitzungsende
+verbleibende Sitzungszeit
 
-### Datenbank
+Die aktuelle Sitzungsdauer beträgt 120 Minuten.
 
-- PostgreSQL
-- Docker
+Abgelaufene Sitzungen werden automatisch beendet, damit keine alten Sitzungen dauerhaft aktiv bleiben.
 
-### Weitere geplante Technologien
+Eine aktive Sitzung kann über „Aufenthalt verlängern“ um weitere 120 Minuten verlängert werden. Dabei bleibt dieselbe Sitzung bestehen und erhält eine neue Endzeit.
 
-- WebSocket für Echtzeit-Aktualisierungen
-- NestJS Scheduler für automatische Sitzungsbeendigung
-- NFC als primärer Check-in
+Über „Auschecken“ kann die Sitzung jederzeit manuell beendet werden. Der belegte Platz wird anschließend automatisch wieder freigegeben.
 
-## Projektstruktur
+Für bestimmte Räume kann zusätzlich eine automatische Schließlogik aktiviert werden. Wenn keine aktive Sitzung mehr vorhanden ist, kann der Raum vorübergehend als geschlossen angezeigt werden.
 
-```text
-lernraum-app/
-├── backend/            # NestJS, Prisma und REST API
-├── frontend/           # Next.js Benutzeroberfläche
-└── docker-compose.yml  # Lokale PostgreSQL-Datenbank
-```
+Push-Benachrichtigungen
 
-## Bereits umgesetzt
+Nutzer können Push-Benachrichtigungen aktivieren.
 
-- Next.js-Frontend
-- NestJS-Backend
-- PostgreSQL lokal über Docker
-- Prisma-Anbindung an PostgreSQL
-- Prisma-Migrationen
-- Datenmodelle für Lernräume und Sitzungen
-- PrismaService und PrismaModule
-- RoomsModule, RoomsController und RoomsService
-- SessionsModule, SessionsController und SessionsService
-- REST-Endpunkte für Lernräume und Sitzungen
-- responsive Lernraumübersicht
-- Raumdetailseite
-- Anzeige von Raumbezeichnung, Gebäude, Etage und Gesamtkapazität
-- dynamische Berechnung und Anzeige freier Plätze
-- QR-Code-basierter Check-in
-- Validierung des Raum-Tokens
-- anonyme Sitzungszuordnung über eine lokale `clientId`
-- Prüfung zentraler Check-in-Regeln
-- Erfolgs- und Fehlermeldungen beim Check-in
-- automatische Weiterleitung zur aktiven Sitzung nach erfolgreichem Check-in
-- Anzeige der aktiven Sitzung
-- Anzeige von Check-in-Zeit, automatischem Sitzungsende und verbleibender Zeit
-- dynamische Navigation abhängig von einer aktiven Sitzung
-- Check-out einer aktiven Sitzung
-- automatische Freigabe des belegten Platzes nach Check-out
-- Rückleitung zur Lernraumübersicht nach dem Check-out
+Zehn Minuten vor dem automatischen Sitzungsende wird eine Erinnerung gesendet. Die Benachrichtigung kann auch empfangen werden, wenn die Anwendung nicht im Vordergrund geöffnet ist.
 
-## Aktuelle API-Endpunkte
+Wird eine Sitzung verlängert, wird der Erinnerungszeitpunkt entsprechend neu gesetzt. Nach einem vorherigen Check-out wird keine Erinnerung mehr versendet.
 
-### Lernräume
+Installierbare Web-App
 
-```text
-GET /rooms
-GET /rooms/:id
-```
+Die Lernraum-Anwendung ist als Progressive Web App (PWA) vorbereitet.
 
-### Sitzungen
+Dadurch kann sie auf unterstützten Smartphones auf dem Startbildschirm installiert und anschließend ähnlich wie eine normale App gestartet werden.
 
-```text
-POST /sessions/check-in
-GET  /sessions/current/:clientId
-POST /sessions/check-out
-```
+Umgesetzt wurden unter anderem:
 
-## Check-in
+Web-App-Manifest
+Service Worker
+App-Icons
+Installationsfunktion innerhalb der Anwendung
 
-Beim Check-in wird der QR-Code des jeweiligen Lernraums gescannt.
+Die Installation wurde auf Android erfolgreich getestet.
 
-Der QR-Code enthält einen eindeutigen `raumToken`, der vom Backend validiert wird.
+Admin-Bereich
 
-Zusätzlich wird eine lokal erzeugte anonyme `clientId` verwendet, um eine Sitzung einem Browser bzw. Gerät zuzuordnen.
+Für die Verwaltung der Lernräume steht ein geschützter Administratorbereich zur Verfügung.
 
-Beim Check-in werden unter anderem folgende Regeln geprüft:
+Administratoren können:
 
-- der Raum-Token muss gültig sein
-- der Lernraum muss aktiv sein
-- es muss mindestens ein freier Platz vorhanden sein
-- die maximale Raumkapazität darf nicht überschritten werden
-- ein Client darf maximal eine aktive Sitzung besitzen
+Lernräume anzeigen
+neue Lernräume anlegen
+bestehende Lernräume bearbeiten
+Gebäude, Etage, Kapazität und Status verwalten
+spezielle Raumregeln konfigurieren
+QR-Codes für Lernräume erzeugen
+QR-Codes als PDF ausgeben
 
-Nach einem erfolgreichen Check-in wird eine neue Sitzung erstellt und die Anzahl der freien Plätze entsprechend reduziert.
+Jeder neu angelegte Lernraum erhält automatisch einen eindeutigen Raum-Token.
 
-Anschließend wird der Nutzer automatisch zur aktiven Sitzung weitergeleitet.
+QR-Codes
 
-## Aktive Sitzung
+Jeder Lernraum besitzt einen eigenen QR-Code.
 
-Nach einem erfolgreichen Check-in wird die Seite **„Aktuelle Sitzung“** verfügbar.
+Der QR-Code verweist auf den direkten Check-in des jeweiligen Raums:
 
-Dort werden folgende Informationen angezeigt:
+/check-in?roomToken=<RAUM_TOKEN>
 
-- Raumbezeichnung
-- Gebäude
-- Etage
-- Sitzungsstatus
-- Check-in-Zeit
-- automatisches Sitzungsende
-- verbleibende Sitzungszeit
+Der Raum-Token bleibt grundsätzlich bestehen. Dadurch kann ein ausgedruckter QR-Code dauerhaft im jeweiligen Lernraum verwendet werden.
 
-Die aktuelle Sitzungsdauer beträgt im Prototyp **120 Minuten**.
+Über den Admin-Bereich kann der QR-Code jederzeit erneut angezeigt und als PDF ausgegeben werden.
 
-Über den Button **„Auschecken“** kann die aktive Sitzung beendet werden. Anschließend wird der zuvor belegte Platz wieder freigegeben und der Nutzer zur Lernraumübersicht zurückgeleitet.
-
-Der Button **„Aufenthalt verlängern“** ist bereits in der Benutzeroberfläche vorhanden. Die zugehörige Logik wird in einem späteren Entwicklungsschritt umgesetzt.
-
-## Dynamische Navigation
-
-Die Navigation richtet sich nach dem aktuellen Sitzungsstatus.
-
-Ohne aktive Sitzung:
-
-```text
-Lernräume | Besuche
-```
-
-Mit aktiver Sitzung:
-
-```text
-Lernräume | Aktuelle Sitzung | Besuche
-```
-
-Nach einem Check-out verschwindet der Navigationspunkt **„Aktuelle Sitzung“** automatisch wieder.
-
-## Anonyme Nutzung
+Anonyme Nutzung
 
 Studierende können die Anwendung ohne Registrierung und ohne Login verwenden.
 
-Für die technische Zuordnung einer Sitzung wird eine anonyme Kennung im Browser erzeugt und über `localStorage` gespeichert.
+Für die technische Zuordnung einer Sitzung wird eine anonyme Client-ID lokal im Browser gespeichert:
 
-```text
 lernraum-client-id
-```
 
-Diese Kennung wird beim Check-in sowie beim Abrufen und Beenden einer aktiven Sitzung verwendet.
+Diese Kennung wird unter anderem für Check-in, aktive Sitzung, Verlängerung, Check-out und Push-Benachrichtigungen verwendet.
 
-Ein späterer Administratorbereich wird separat geschützt.
+Der Administratorbereich ist davon getrennt und geschützt.
 
-## Noch geplanter Funktionsumfang
+Architektur
 
-- NFC als primärer Check-in
-- Verlängerung einer aktiven Sitzung
-- automatische Beendigung abgelaufener Sitzungen
-- Erinnerung vor Ablauf einer Sitzung
-- Echtzeit-Aktualisierung der Belegung über WebSocket
-- Raumwechsel
-- Ausblenden vollständig belegter Räume
-- geschützter Administratorbereich
+Die Anwendung ist in Frontend, Backend und Datenbank getrennt aufgebaut.
 
-## Lokale Entwicklung
+Smartphone / Browser
+        ↓
+Next.js Frontend
+        ↓
+REST API
+        ↓
+NestJS Backend
+        ↓
+Prisma ORM
+        ↓
+PostgreSQL
 
-### PostgreSQL starten
+Das Frontend übernimmt die Benutzeroberfläche. Das Backend steuert die Geschäftslogik, Sitzungsverwaltung und Datenverarbeitung.
 
-Im Projektverzeichnis:
+Die Daten werden über Prisma in PostgreSQL gespeichert.
 
-```bash
+Technologie-Stack
+Frontend
+Next.js
+React
+TypeScript
+Tailwind CSS
+Progressive Web App
+Service Worker
+Web Push
+Backend
+NestJS
+TypeScript
+Prisma ORM
+NestJS Scheduler
+Web Push
+Datenbank und Infrastruktur
+PostgreSQL
+Docker
+Weitere Werkzeuge
+Git
+GitHub
+QR-Code-Generierung
+PDF-Generierung
+
+Projektstruktur
+lernraum-app/
+├── backend/            # NestJS, Prisma und Backend-Logik
+├── frontend/           # Next.js Benutzeroberfläche
+├── docker-compose.yml  # Lokale PostgreSQL-Datenbank
+└── README.md
+
+Wichtige API-Endpunkte
+
+Lernräume
+GET /rooms
+GET /rooms/:id
+GET /rooms/by-token/:roomToken
+
+Sitzungen
+POST /sessions/check-in
+GET  /sessions/current/:clientId
+POST /sessions/check-out
+POST /sessions/extend
+Push-Benachrichtigungen
+GET  /push-notifications/public-key
+POST /push-notifications/subscribe
+
+Administration
+Für die Raumverwaltung stehen geschützte Admin-Endpunkte zur Verfügung, unter anderem für:
+
+Anzeigen von Lernräumen
+Erstellen neuer Lernräume
+Bearbeiten bestehender Lernräume
+Ändern von Raumstatus und Raumkonfiguration
+Lokale Entwicklung
+Voraussetzungen
+
+Für die lokale Entwicklung werden benötigt:
+
+Node.js
+npm
+Docker
+Git
+PostgreSQL starten
+
+Im Hauptverzeichnis:
+
 docker compose up -d
-```
 
-Die lokale PostgreSQL-Datenbank läuft derzeit über Port:
+Die PostgreSQL-Datenbank läuft lokal über Port:
 
-```text
 5434
-```
-
-### Backend starten
-
-```bash
+Backend starten
 cd backend
 npm install
 npm run start:dev
-```
 
-Das Backend läuft lokal auf:
+Das Backend läuft standardmäßig auf:
 
-```text
 http://localhost:3002
-```
+Frontend starten
 
-### Frontend starten
+In einem zweiten Terminal:
 
-```bash
 cd frontend
 npm install
 npm run dev
+
+Das Frontend läuft lokal über den konfigurierten Next.js-Port.
+
+Aktueller Entwicklungsstand
+
+Der zentrale Nutzungsablauf ist funktionsfähig. Zusätzlich stehen bereits ein geschützter Admin-Bereich, automatische Sitzungsbeendigung, Sitzungsverlängerung, Push-Benachrichtigungen und die Installation als Web-App zur Verfügung.
+
+Das Projekt befindet sich weiterhin in aktiver Entwicklung.
+
+Geplante Erweiterungen
+
+Zu den nächsten geplanten Erweiterungen gehören unter anderem:
+
+Besuchshistorie vergangener Sitzungen
+Echtzeit-Aktualisierungen über WebSocket
+NFC-basierter Check-in
+Raumwechsel
+weitere Optimierung der mobilen Nutzung
+
+Projektkontext
+
+Dieses Projekt wird im Rahmen von Projekt 1 im Studiengang Wirtschaftsinformatik an der Hochschule Kaiserslautern entwickelt.
+
+Der Schwerpunkt liegt auf der Konzeption und prototypischen Umsetzung einer mobilen Webanwendung zur besseren Nutzung vorhandener Lernräume.
 ```
-
-## Aktuelle Projektphase
-
-### Woche 5 – Raumdetails, Check-in und aktive Sitzung
-
-In Woche 5 wurde erstmals ein vollständiger Kernablauf der Anwendung umgesetzt:
-
-```text
-Lernraumübersicht
-    ↓
-Raumdetails
-    ↓
-QR-Code-basierter Check-in
-    ↓
-Sitzung erstellen
-    ↓
-Aktuelle Sitzung anzeigen
-    ↓
-Check-out
-    ↓
-Platz wieder freigeben
-```
-
-Damit ist erstmals ein vollständiger realer Ablauf von der Auswahl eines Lernraums bis zum Beenden einer Sitzung demonstrierbar.
-
-## Ziel
-
-Am Ende des Projekts soll ein Studierender innerhalb kurzer Zeit erkennen können, welcher Lernraum aktuell freie Plätze bietet, den Raum auswählen und dort mit möglichst wenig Aufwand einchecken können.
-
-Die Anwendung soll dabei einfach, mobil nutzbar und ohne verpflichtende Registrierung verwendbar sein.

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import ActiveSessionPanel from "./ActiveSessionPanel";
+import InstallAppPrompt from "./InstallAppPrompt";
 
 type ActiveSession = {
   id: number;
@@ -24,6 +25,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
 export default function CurrentSession() {
   const [session, setSession] = useState<ActiveSession | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -118,5 +120,10 @@ export default function CurrentSession() {
     );
   }
 
-  return <ActiveSessionPanel session={session} />;
+  return (
+    <>
+      <InstallAppPrompt />
+      <ActiveSessionPanel session={session} />
+    </>
+  );
 }

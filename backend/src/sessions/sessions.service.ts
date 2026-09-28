@@ -45,16 +45,34 @@ export class SessionsService {
     });
 
     for (const session of sessions) {
+      const stillActiveSession = await this.prisma.session.findFirst({
+        where: {
+          id: session.id,
+          status: 'ACTIVE',
+          reminderSentAt: null,
+          expiresAt: {
+            gt: new Date(),
+          },
+        },
+        include: {
+          lernraum: true,
+        },
+      });
+
+      if (!stillActiveSession) {
+        continue;
+      }
+
       const result = await this.pushNotificationsService.sendSessionReminder(
-        session.clientId,
-        session.lernraum.raumBezeichnung,
-        session.expiresAt,
+        stillActiveSession.clientId,
+        stillActiveSession.lernraum.raumBezeichnung,
+        stillActiveSession.expiresAt,
       );
 
       if (result.sent > 0) {
         await this.prisma.session.update({
           where: {
-            id: session.id,
+            id: stillActiveSession.id,
           },
           data: {
             reminderSentAt: new Date(),

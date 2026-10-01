@@ -39,11 +39,7 @@ export default async function CheckInPage({ params }: CheckInPageProps) {
         </Link>
 
         <CheckInPanel room={room} />
-
-        <footer className="mt-7 text-center text-xs text-slate-400 sm:mt-8">
-          Projekt 1 · Hochschule Kaiserslautern
-        </footer>
-      </div>
+</div>
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import AppNavigation from "../../components/AppNavigation";
+﻿import AppNavigation from "../../components/AppNavigation";
 import CurrentSession from "../../components/CurrentSession";
 
 export default function SessionPage() {
@@ -22,11 +22,8 @@ export default function SessionPage() {
         <AppNavigation />
 
         <CurrentSession />
-
-        <footer className="mt-8 text-center text-xs text-slate-400">
-          Projekt 1 · Hochschule Kaiserslautern
-        </footer>
-      </div>
+</div>
     </main>
   );
 }
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -60,7 +60,7 @@ export default function DirectCheckInPage() {
       const roomToken = searchParams.get("roomToken")?.trim() ?? "";
 
       if (!roomToken) {
-        setMessage("Der QR-Code enthält keinen gültigen Raumzugang.");
+        setMessage("Der QR-Code enthÃ¤lt keinen gÃ¼ltigen Raumzugang.");
         setStatus("error");
         return;
       }
@@ -158,7 +158,7 @@ export default function DirectCheckInPage() {
 
         /*
          * In der Next.js-Entwicklungsumgebung kann ein Effect
-         * zweimal geprüft werden. Falls dadurch bereits dieselbe
+         * zweimal geprÃ¼ft werden. Falls dadurch bereits dieselbe
          * Sitzung erstellt wurde, behandeln wir sie nicht als Fehler.
          */
         if (!checkInResponse.ok) {
@@ -190,7 +190,7 @@ export default function DirectCheckInPage() {
           if (!cancelled) {
             setMessage(
               checkInData?.message ??
-                "Der Check-in konnte nicht durchgeführt werden.",
+                "Der Check-in konnte nicht durchgefÃ¼hrt werden.",
             );
 
             setStatus("error");
@@ -261,7 +261,7 @@ export default function DirectCheckInPage() {
 
             {room && (
               <p className="mt-2 text-sm text-blue-50/80 sm:text-base">
-                {room.gebaeude} · {room.etage}. Etage
+                {room.gebaeude} Â· {room.etage}. Etage
               </p>
             )}
           </div>
@@ -272,11 +272,11 @@ export default function DirectCheckInPage() {
                 <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-[#075985]/20 border-t-[#075985]" />
 
                 <h2 className="mt-5 text-xl font-bold">
-                  Lernraum wird erkannt …
+                  Lernraum wird erkannt â€¦
                 </h2>
 
                 <p className="mt-2 text-sm text-slate-500">
-                  Der QR-Code wird überprüft.
+                  Der QR-Code wird Ã¼berprÃ¼ft.
                 </p>
               </div>
             )}
@@ -286,7 +286,7 @@ export default function DirectCheckInPage() {
                 <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-[#075985]/20 border-t-[#075985]" />
 
                 <h2 className="mt-5 text-xl font-bold">
-                  Check-in wird überprüft …
+                  Check-in wird Ã¼berprÃ¼ft â€¦
                 </h2>
 
                 <p className="mt-2 text-sm text-slate-500">
@@ -294,7 +294,7 @@ export default function DirectCheckInPage() {
                 </p>
 
                 <p className="mt-1 text-sm text-slate-400">
-                  Die Check-in-Regeln werden geprüft.
+                  Die Check-in-Regeln werden geprÃ¼ft.
                 </p>
               </div>
             )}
@@ -302,7 +302,7 @@ export default function DirectCheckInPage() {
             {status === "success" && room && (
               <div className="py-6 text-center">
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#DFF9F4] text-3xl font-bold text-[#087F73]">
-                  ✓
+                  âœ“
                 </div>
 
                 <h2 className="mt-4 text-2xl font-bold text-[#087F73]">
@@ -316,7 +316,7 @@ export default function DirectCheckInPage() {
                 {freiePlaetze !== null && (
                   <p className="mt-3 text-sm font-semibold text-[#075985]">
                     Noch {freiePlaetze}{" "}
-                    {freiePlaetze === 1 ? "Platz frei" : "Plätze frei"}
+                    {freiePlaetze === 1 ? "Platz frei" : "PlÃ¤tze frei"}
                   </p>
                 )}
 
@@ -333,7 +333,7 @@ export default function DirectCheckInPage() {
                 </div>
 
                 <h2 className="mt-4 text-xl font-bold text-red-700">
-                  Check-in nicht möglich
+                  Check-in nicht mÃ¶glich
                 </h2>
 
                 <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-red-600">
@@ -344,17 +344,14 @@ export default function DirectCheckInPage() {
                   href="/"
                   className="mt-6 flex w-full items-center justify-center rounded-2xl border border-slate-200 px-5 py-3.5 text-sm font-semibold text-slate-500 transition hover:bg-slate-50"
                 >
-                  Zu den Lernräumen
+                  Zu den LernrÃ¤umen
                 </Link>
               </div>
             )}
           </div>
         </section>
-
-        <footer className="mt-7 text-center text-xs text-slate-400">
-          Projekt 1 · Hochschule Kaiserslautern
-        </footer>
-      </div>
+</div>
     </main>
   );
 }
+

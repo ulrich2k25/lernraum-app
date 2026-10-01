@@ -1,6 +1,8 @@
-import type { Metadata, Viewport } from "next";
+﻿import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import AppFooter from "@/components/AppFooter";
 
 import "./globals.css";
 
@@ -67,7 +69,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           `}
         </Script>
 
-        {children}
+        <div className="flex flex-1 flex-col pb-20 md:pb-0">
+          {children}
+        </div>
+
+        <AppFooter />
       </body>
     </html>
   );

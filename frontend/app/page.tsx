@@ -1,4 +1,4 @@
-import type { Room } from "../types/room";
+﻿import type { Room } from "../types/room";
 import AppHeader from "../components/AppHeader";
 import AppNavigation from "../components/AppNavigation";
 import HomeHero from "../components/HomeHero";
@@ -21,11 +21,8 @@ export default async function Home() {
         <HomeHero />
 
         <RoomsOverview rooms={rooms} />
-
-        <footer className="mt-10 border-t border-slate-200 pt-5 text-center text-xs text-slate-400">
-          Projekt 1 · Hochschule Kaiserslautern
-        </footer>
-      </div>
+</div>
     </main>
   );
 }
+

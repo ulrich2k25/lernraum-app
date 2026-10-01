@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -55,7 +55,7 @@ export default function AdminRoomsPage() {
         }
 
         if (!response.ok) {
-          throw new Error("Die Lernräume konnten nicht geladen werden.");
+          throw new Error("Die LernrÃ¤ume konnten nicht geladen werden.");
         }
 
         const data = (await response.json()) as AdminRoom[];
@@ -64,7 +64,7 @@ export default function AdminRoomsPage() {
         setError(
           error instanceof Error
             ? error.message
-            : "Die Lernräume konnten nicht geladen werden.",
+            : "Die LernrÃ¤ume konnten nicht geladen werden.",
         );
       } finally {
         setIsLoading(false);
@@ -97,11 +97,11 @@ export default function AdminRoomsPage() {
             </p>
 
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-              Lernräume
+              LernrÃ¤ume
             </h1>
 
             <p className="mt-2 text-sm text-slate-500">
-              Räume, Kapazitäten und QR-Zugänge verwalten.
+              RÃ¤ume, KapazitÃ¤ten und QR-ZugÃ¤nge verwalten.
             </p>
           </div>
 
@@ -110,7 +110,7 @@ export default function AdminRoomsPage() {
               href="/admin/rooms/new"
               className="rounded-xl bg-[#075985] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#064e73]"
             >
-              + Lernraum hinzufügen
+              + Lernraum hinzufÃ¼gen
             </Link>
 
             <button
@@ -125,7 +125,7 @@ export default function AdminRoomsPage() {
 
         {isLoading && (
           <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500 shadow-sm">
-            Lernräume werden geladen ...
+            LernrÃ¤ume werden geladen ...
           </div>
         )}
 
@@ -138,7 +138,7 @@ export default function AdminRoomsPage() {
         {!isLoading && !error && rooms.length === 0 && (
           <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
             <h2 className="text-lg font-bold text-slate-900">
-              Keine Lernräume vorhanden
+              Keine LernrÃ¤ume vorhanden
             </h2>
 
             <p className="mt-2 text-sm text-slate-500">
@@ -161,7 +161,7 @@ export default function AdminRoomsPage() {
                     </h2>
 
                     <p className="mt-1 text-sm text-slate-500">
-                      {room.gebaeude} · {room.etage}
+                      {room.gebaeude} Â· {room.etage}
                     </p>
                   </div>
 
@@ -179,7 +179,7 @@ export default function AdminRoomsPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-2xl bg-[#F4F8FA] p-4">
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                      Kapazität
+                      KapazitÃ¤t
                     </p>
 
                     <p className="mt-1 text-xl font-bold text-slate-900">
@@ -189,7 +189,7 @@ export default function AdminRoomsPage() {
 
                   <div className="rounded-2xl bg-[#F4F8FA] p-4">
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                      Freie Plätze
+                      Freie PlÃ¤tze
                     </p>
 
                     <p className="mt-1 text-xl font-bold text-[#075985]">
@@ -215,7 +215,7 @@ export default function AdminRoomsPage() {
                     className="flex-1 rounded-xl border border-[#075985] px-4 py-3 text-sm font-semibold text-[#075985] transition hover:bg-[#075985]/5"
                   >
                     {selectedQrRoomId === room.id
-                      ? "QR-Code schließen"
+                      ? "QR-Code schlieÃŸen"
                       : "QR-Code"}
                   </button>
 
@@ -241,11 +241,8 @@ export default function AdminRoomsPage() {
             ))}
           </section>
         )}
-
-        <footer className="mt-10 border-t border-slate-200 pt-6 text-center text-xs text-slate-400">
-          Projekt 1 · Hochschule Kaiserslautern
-        </footer>
-      </div>
+</div>
     </main>
   );
 }
+

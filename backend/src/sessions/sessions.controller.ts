@@ -28,4 +28,9 @@ export class SessionsController {
   findCurrent(@Param('clientId') clientId: string) {
     return this.sessionsService.findCurrent(clientId);
   }
+
+  @Get('history/:clientId')
+  findHistory(@Param('clientId') clientId: string) {
+    return this.sessionsService.findHistory(clientId);
+  }
 }

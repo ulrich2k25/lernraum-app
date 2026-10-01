@@ -317,6 +317,42 @@ export class SessionsService {
     });
   }
 
+  async findHistory(clientId: string) {
+    const normalizedClientId = clientId?.trim();
+
+    if (!normalizedClientId) {
+      throw new BadRequestException(
+        'Die Sitzungen konnten nicht eindeutig zugeordnet werden.',
+      );
+    }
+
+    return this.prisma.session.findMany({
+      where: {
+        clientId: normalizedClientId,
+        status: 'ENDED',
+      },
+      orderBy: {
+        startedAt: 'desc',
+      },
+      select: {
+        id: true,
+        status: true,
+        startedAt: true,
+        expiresAt: true,
+        endedAt: true,
+
+        lernraum: {
+          select: {
+            id: true,
+            raumBezeichnung: true,
+            gebaeude: true,
+            etage: true,
+          },
+        },
+      },
+    });
+  }
+
   async extendSession(dto: ExtendSessionDto) {
     const clientId = dto.clientId?.trim();
 

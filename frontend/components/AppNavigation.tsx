@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
 export default function AppNavigation() {
   const pathname = usePathname();
+  const t = useTranslations("navigation");
   const [hasActiveSession, setHasActiveSession] = useState(false);
 
   useEffect(() => {
@@ -16,50 +18,27 @@ export default function AppNavigation() {
     async function checkActiveSession() {
       try {
         const clientId = localStorage.getItem("lernraum-client-id");
-
         if (!clientId) {
-          if (!cancelled) {
-            setHasActiveSession(false);
-          }
-
+          if (!cancelled) setHasActiveSession(false);
           return;
         }
 
-        const response = await fetch(
-          `${API_URL}/sessions/current/${encodeURIComponent(clientId)}`,
-          {
-            cache: "no-store",
-          },
-        );
-
+        const response = await fetch(`${API_URL}/sessions/current/${encodeURIComponent(clientId)}`, { cache: "no-store" });
         if (!response.ok) {
-          if (!cancelled) {
-            setHasActiveSession(false);
-          }
-
+          if (!cancelled) setHasActiveSession(false);
           return;
         }
 
         const text = await response.text();
-        const session = text ? JSON.parse(text) : null;
-
-        if (!cancelled) {
-          setHasActiveSession(Boolean(session));
-        }
+        if (!cancelled) setHasActiveSession(Boolean(text ? JSON.parse(text) : null));
       } catch (error) {
-        console.error("Aktive Sitzung konnte nicht geprüft werden:", error);
-
-        if (!cancelled) {
-          setHasActiveSession(false);
-        }
+        console.error("Active session check failed:", error);
+        if (!cancelled) setHasActiveSession(false);
       }
     }
 
     void checkActiveSession();
-
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [pathname]);
 
   const roomsActive = pathname === "/" || pathname.startsWith("/rooms");
@@ -69,74 +48,31 @@ export default function AppNavigation() {
   return (
     <>
       <nav className="hidden items-center gap-2 rounded-2xl bg-white p-2 shadow-sm ring-1 ring-slate-200 md:flex">
-        <Link
-          href="/"
-          className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
-            roomsActive
-              ? "bg-[#102A43] text-white"
-              : "text-slate-500 hover:bg-slate-100"
-          }`}
-        >
-          Lernräume
+        <Link href="/" className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${roomsActive ? "bg-[#102A43] text-white" : "text-slate-500 hover:bg-slate-100"}`}>
+          {t("rooms")}
         </Link>
-
         {hasActiveSession && (
-          <Link
-            href="/session"
-            className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
-              sessionActive
-                ? "bg-[#102A43] text-white"
-                : "text-slate-500 hover:bg-slate-100"
-            }`}
-          >
-            Aktuelle Sitzung
+          <Link href="/session" className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${sessionActive ? "bg-[#102A43] text-white" : "text-slate-500 hover:bg-slate-100"}`}>
+            {t("currentSession")}
           </Link>
         )}
-
-        <Link
-          href="/besuche"
-          className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
-            visitsActive
-              ? "bg-[#102A43] text-white"
-              : "text-slate-500 hover:bg-slate-100"
-          }`}
-        >
-          Besuche
+        <Link href="/besuche" className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${visitsActive ? "bg-[#102A43] text-white" : "text-slate-500 hover:bg-slate-100"}`}>
+          {t("visits")}
         </Link>
       </nav>
 
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 px-3 py-2 backdrop-blur md:hidden">
         <div className="mx-auto flex max-w-md items-center justify-around">
-          <Link
-            href="/"
-            className={`flex min-w-20 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition ${
-              roomsActive ? "text-[#0F8B8D]" : "text-slate-400"
-            }`}
-          >
-            <span className="text-xl">⌂</span>
-            <span>Lernräume</span>
+          <Link href="/" className={`flex min-w-20 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition ${roomsActive ? "text-[#0F8B8D]" : "text-slate-400"}`}>
+            <span className="text-xl">⌂</span><span>{t("rooms")}</span>
           </Link>
-
           {hasActiveSession && (
-            <Link
-              href="/session"
-              className={`flex min-w-20 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition ${
-                sessionActive ? "text-[#0F8B8D]" : "text-slate-400"
-              }`}
-            >
-              <span className="text-xl">◷</span>
-              <span>Sitzung</span>
+            <Link href="/session" className={`flex min-w-20 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition ${sessionActive ? "text-[#0F8B8D]" : "text-slate-400"}`}>
+              <span className="text-xl">◷</span><span>{t("session")}</span>
             </Link>
           )}
-
-          <Link
-            href="/besuche"
-            className={`flex min-w-20 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition ${
-              visitsActive ? "text-[#0F8B8D]" : "text-slate-400"
-            }`}
-          >
-            <span className="text-xl">↻</span>
-            <span>Besuche</span>
+          <Link href="/besuche" className={`flex min-w-20 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition ${visitsActive ? "text-[#0F8B8D]" : "text-slate-400"}`}>
+            <span className="text-xl">↻</span><span>{t("visits")}</span>
           </Link>
         </div>
       </nav>

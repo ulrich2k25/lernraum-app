@@ -1,4 +1,4 @@
-﻿import type { Room } from "../types/room";
+import type { Room } from "../types/room";
 import AppHeader from "../components/AppHeader";
 import AppNavigation from "../components/AppNavigation";
 import HomeHero from "../components/HomeHero";

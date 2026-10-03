@@ -138,6 +138,7 @@ export class SessionsService {
     const roomToken = dto.roomToken?.trim();
     const clientId = dto.clientId?.trim();
     const roomId = dto.roomId;
+    const groupSize = dto.groupSize ?? 1;
 
     if (!roomToken) {
       throw new BadRequestException('Ungültiger QR-Code.');
@@ -151,6 +152,10 @@ export class SessionsService {
       throw new BadRequestException(
         'Die Sitzung konnte nicht eindeutig zugeordnet werden.',
       );
+    }
+
+    if (!Number.isInteger(groupSize) || groupSize < 1) {
+      throw new BadRequestException('Ungültige Gruppengröße.');
     }
 
     const now = new Date();
@@ -177,11 +182,11 @@ export class SessionsService {
       }
 
       await tx.$queryRaw`
-        SELECT "id"
-        FROM "Lernraum"
-        WHERE "id" = ${roomId}
-        FOR UPDATE
-      `;
+      SELECT "id"
+      FROM "Lernraum"
+      WHERE "id" = ${roomId}
+      FOR UPDATE
+    `;
 
       const room = await tx.lernraum.findUnique({
         where: {
@@ -215,7 +220,7 @@ export class SessionsService {
         );
       }
 
-      const activeSessions = await tx.session.count({
+      const occupancyResult = await tx.session.aggregate({
         where: {
           lernraumId: room.id,
           status: 'ACTIVE',
@@ -223,10 +228,23 @@ export class SessionsService {
             gt: now,
           },
         },
+        _sum: {
+          groupSize: true,
+        },
       });
 
-      if (activeSessions >= room.kapazitaet) {
+      const belegtePlaetze = occupancyResult._sum.groupSize ?? 0;
+
+      const freiePlaetze = Math.max(room.kapazitaet - belegtePlaetze, 0);
+
+      if (freiePlaetze === 0) {
         throw new ConflictException('Dieser Lernraum ist bereits voll.');
+      }
+
+      if (groupSize > freiePlaetze) {
+        throw new ConflictException(
+          `Für diese Gruppe sind nicht genügend Plätze frei. Aktuell sind noch ${freiePlaetze} Plätze verfügbar.`,
+        );
       }
 
       const session = await tx.session.create({
@@ -235,6 +253,7 @@ export class SessionsService {
           lernraumId: room.id,
           status: 'ACTIVE',
           expiresAt,
+          groupSize,
         },
         select: {
           id: true,
@@ -243,6 +262,7 @@ export class SessionsService {
           startedAt: true,
           expiresAt: true,
           endedAt: true,
+          groupSize: true,
 
           lernraum: {
             select: {
@@ -269,9 +289,12 @@ export class SessionsService {
       }
 
       return {
-        message: `Check-in erfolgreich. Du bist jetzt in Raum ${room.raumBezeichnung} eingecheckt.`,
+        message:
+          groupSize >= 2
+            ? `Gruppen-Check-in erfolgreich. ${groupSize} Personen sind jetzt in Raum ${room.raumBezeichnung} eingecheckt.`
+            : `Check-in erfolgreich. Du bist jetzt in Raum ${room.raumBezeichnung} eingecheckt.`,
         session,
-        freiePlaetze: room.kapazitaet - activeSessions - 1,
+        freiePlaetze: freiePlaetze - groupSize,
       };
     });
   }
@@ -302,6 +325,7 @@ export class SessionsService {
         startedAt: true,
         expiresAt: true,
         endedAt: true,
+        groupSize: true,
 
         lernraum: {
           select: {
@@ -340,6 +364,7 @@ export class SessionsService {
         startedAt: true,
         expiresAt: true,
         endedAt: true,
+        groupSize: true,
 
         lernraum: {
           select: {
@@ -399,6 +424,7 @@ export class SessionsService {
         startedAt: true,
         expiresAt: true,
         endedAt: true,
+        groupSize: true,
 
         lernraum: {
           select: {
@@ -472,6 +498,7 @@ export class SessionsService {
           startedAt: true,
           expiresAt: true,
           endedAt: true,
+          groupSize: true,
 
           lernraum: {
             select: {

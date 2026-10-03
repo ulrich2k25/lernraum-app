@@ -30,6 +30,7 @@ model Session {
   expiresAt      DateTime
   endedAt        DateTime?
   reminderSentAt DateTime?
+  groupSize      Int           @default(1)
 
   lernraum Lernraum @relation(fields: [lernraumId], references: [id], onDelete: Cascade)
 

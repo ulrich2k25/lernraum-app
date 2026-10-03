@@ -7,4 +7,8 @@ export type Room = {
   status: string;
   freiePlaetze: number;
   isTemporarilyClosed: boolean;
+
+  aktiveSitzungen?: number;
+  aktiveGruppen?: number;
+  personenInGruppen?: number;
 };

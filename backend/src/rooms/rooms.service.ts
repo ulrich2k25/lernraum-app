@@ -32,6 +32,43 @@ export class RoomsService {
     return randomBytes(32).toString('hex');
   }
 
+  private async getRoomOccupancy(roomId: number, now = new Date()) {
+    const sessions = await this.prisma.session.findMany({
+      where: {
+        lernraumId: roomId,
+        status: 'ACTIVE',
+        expiresAt: {
+          gt: now,
+        },
+      },
+      select: {
+        groupSize: true,
+      },
+    });
+
+    const belegtePlaetze = sessions.reduce(
+      (sum, session) => sum + session.groupSize,
+      0,
+    );
+
+    const aktiveGruppen = sessions.filter(
+      (session) => session.groupSize >= 2,
+    ).length;
+
+    const personenInGruppen = sessions.reduce(
+      (sum, session) =>
+        session.groupSize >= 2 ? sum + session.groupSize : sum,
+      0,
+    );
+
+    return {
+      aktiveSitzungen: sessions.length,
+      belegtePlaetze,
+      aktiveGruppen,
+      personenInGruppen,
+    };
+  }
+
   async findAll() {
     const rooms = await this.prisma.lernraum.findMany({
       where: {
@@ -55,21 +92,19 @@ export class RoomsService {
 
     const roomsWithAvailability = await Promise.all(
       rooms.map(async (room) => {
-        const aktiveSitzungen = await this.prisma.session.count({
-          where: {
-            lernraumId: room.id,
-            status: 'ACTIVE',
-            expiresAt: {
-              gt: now,
-            },
-          },
-        });
+        const occupancy = await this.getRoomOccupancy(room.id, now);
 
-        const freiePlaetze = Math.max(room.kapazitaet - aktiveSitzungen, 0);
+        const freiePlaetze = Math.max(
+          room.kapazitaet - occupancy.belegtePlaetze,
+          0,
+        );
 
         return {
           ...room,
           freiePlaetze,
+          aktiveSitzungen: occupancy.aktiveSitzungen,
+          aktiveGruppen: occupancy.aktiveGruppen,
+          personenInGruppen: occupancy.personenInGruppen,
         };
       }),
     );
@@ -100,19 +135,14 @@ export class RoomsService {
       );
     }
 
-    const aktiveSitzungen = await this.prisma.session.count({
-      where: {
-        lernraumId: room.id,
-        status: 'ACTIVE',
-        expiresAt: {
-          gt: new Date(),
-        },
-      },
-    });
+    const occupancy = await this.getRoomOccupancy(room.id);
 
     return {
       ...room,
-      freiePlaetze: Math.max(room.kapazitaet - aktiveSitzungen, 0),
+      freiePlaetze: Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0),
+      aktiveSitzungen: occupancy.aktiveSitzungen,
+      aktiveGruppen: occupancy.aktiveGruppen,
+      personenInGruppen: occupancy.personenInGruppen,
     };
   }
 
@@ -143,19 +173,14 @@ export class RoomsService {
       throw new NotFoundException('Ungültiger QR-Code.');
     }
 
-    const aktiveSitzungen = await this.prisma.session.count({
-      where: {
-        lernraumId: room.id,
-        status: 'ACTIVE',
-        expiresAt: {
-          gt: new Date(),
-        },
-      },
-    });
+    const occupancy = await this.getRoomOccupancy(room.id);
 
     return {
       ...room,
-      freiePlaetze: Math.max(room.kapazitaet - aktiveSitzungen, 0),
+      freiePlaetze: Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0),
+      aktiveSitzungen: occupancy.aktiveSitzungen,
+      aktiveGruppen: occupancy.aktiveGruppen,
+      personenInGruppen: occupancy.personenInGruppen,
     };
   }
 
@@ -181,20 +206,15 @@ export class RoomsService {
 
     return Promise.all(
       rooms.map(async (room) => {
-        const aktiveSitzungen = await this.prisma.session.count({
-          where: {
-            lernraumId: room.id,
-            status: 'ACTIVE',
-            expiresAt: {
-              gt: now,
-            },
-          },
-        });
+        const occupancy = await this.getRoomOccupancy(room.id, now);
 
         return {
           ...room,
-          aktiveSitzungen,
-          freiePlaetze: Math.max(room.kapazitaet - aktiveSitzungen, 0),
+          aktiveSitzungen: occupancy.aktiveSitzungen,
+          belegtePlaetze: occupancy.belegtePlaetze,
+          aktiveGruppen: occupancy.aktiveGruppen,
+          personenInGruppen: occupancy.personenInGruppen,
+          freiePlaetze: Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0),
         };
       }),
     );
@@ -256,6 +276,7 @@ export class RoomsService {
       },
     });
   }
+
   async updateRoom(id: number, data: UpdateRoomData) {
     const room = await this.prisma.lernraum.findUnique({
       where: {
@@ -292,19 +313,11 @@ export class RoomsService {
       throw new BadRequestException('Die Kapazität muss größer als 0 sein.');
     }
 
-    const aktiveSitzungen = await this.prisma.session.count({
-      where: {
-        lernraumId: id,
-        status: 'ACTIVE',
-        expiresAt: {
-          gt: new Date(),
-        },
-      },
-    });
+    const occupancy = await this.getRoomOccupancy(id);
 
-    if (kapazitaet < aktiveSitzungen) {
+    if (kapazitaet < occupancy.belegtePlaetze) {
       throw new BadRequestException(
-        `Die Kapazität darf nicht kleiner als die Anzahl aktiver Sitzungen (${aktiveSitzungen}) sein.`,
+        `Die Kapazität darf nicht kleiner als die aktuelle Belegung (${occupancy.belegtePlaetze}) sein.`,
       );
     }
 
@@ -323,10 +336,13 @@ export class RoomsService {
         `Lernraum ${raumBezeichnung} existiert bereits.`,
       );
     }
+
     const autoCloseWhenEmpty =
       data.autoCloseWhenEmpty ?? room.autoCloseWhenEmpty;
 
-    const isTemporarilyClosed = autoCloseWhenEmpty && aktiveSitzungen === 0;
+    const isTemporarilyClosed =
+      autoCloseWhenEmpty && occupancy.aktiveSitzungen === 0;
+
     return this.prisma.lernraum.update({
       where: {
         id,
@@ -352,6 +368,7 @@ export class RoomsService {
       },
     });
   }
+
   async updateStatus(id: number, status: 'ACTIVE' | 'INACTIVE') {
     if (status !== 'ACTIVE' && status !== 'INACTIVE') {
       throw new BadRequestException('Ungültiger Raumstatus.');

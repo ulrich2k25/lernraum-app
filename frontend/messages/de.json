@@ -60,7 +60,8 @@
     "seats": "Plätze",
     "details": "Details ansehen",
     "openDetails": "Raumdetails öffnen",
-    "detailsAria": "Details zu {room}"
+    "detailsAria": "Details zu {room}",
+    "groupPresence": "{groups, plural, one {# Gruppe} other {# Gruppen}} · {people, plural, one {# Person} other {# Personen}}"
   },
   "roomDetail": {
     "loadError": "Der Lernraum konnte nicht geladen werden.",
@@ -81,7 +82,9 @@
     "floor": "Etage",
     "status": "Status",
     "checkIn": "Einchecken",
-    "checkInHint": "QR-Code scannen · NFC direkt über den Tag im Lernraum"
+    "checkInHint": "QR-Code scannen · NFC direkt über den Tag im Lernraum",
+    "groupPresence": "{groups, plural, one {# Gruppe} other {# Gruppen}} · {people, plural, one {# Person} other {# Personen}}",
+    "groupsInRoom": "Gruppen im Raum"
   },
   "checkInPage": {
     "loadError": "Der Lernraum konnte nicht geladen werden.",
@@ -104,7 +107,24 @@
     "cancel": "Abbrechen",
     "invalidQr": "Der QR-Code enthält keinen gültigen Raumzugang.",
     "genericError": "Der Check-in konnte nicht durchgeführt werden.",
-    "serverError": "Der Server konnte nicht erreicht werden."
+    "serverError": "Der Server konnte nicht erreicht werden.",
+    "roomVerified": "Lernraum erkannt",
+    "wrongRoom": "Der gescannte QR-Code gehört nicht zu diesem Lernraum.",
+    "chooseTypeTitle": "Wie möchtest du einchecken?",
+    "chooseTypeText": "Wähle aus, ob du alleine oder mit einer Gruppe lernst.",
+    "availableOne": "{count} Platz verfügbar",
+    "availableMany": "{count} Plätze verfügbar",
+    "alone": "Alleine",
+    "aloneText": "Ich checke nur für mich selbst ein.",
+    "group": "Als Gruppe",
+    "groupText": "Ich checke für mehrere Personen gemeinsam ein.",
+    "groupUnavailable": "Für einen Gruppen-Check-in sind mindestens 2 freie Plätze erforderlich.",
+    "groupSizeTitle": "Wie viele Personen seid ihr?",
+    "people": "Personen",
+    "decreaseGroup": "Gruppengröße verkleinern",
+    "increaseGroup": "Gruppengröße erhöhen",
+    "confirmGroup": "Gruppe mit {count} Personen einchecken",
+    "groupSuccessRoom": "Gruppen-Check-in erfolgreich. {count} Personen sind jetzt in Raum {room} eingecheckt."
   },
   "directCheckIn": {
     "label": "Direkter QR-Check-in",
@@ -125,7 +145,23 @@
     "roomLoadError": "Der Lernraum konnte nicht geladen werden.",
     "genericError": "Der Check-in konnte nicht durchgeführt werden.",
     "serverError": "Der Server konnte nicht erreicht werden.",
-    "successMessage": "Check-in erfolgreich. Du bist jetzt in Raum {room} eingecheckt."
+    "successMessage": "Check-in erfolgreich. Du bist jetzt in Raum {room} eingecheckt.",
+    "chooseTypeTitle": "Wie möchtest du einchecken?",
+    "chooseTypeText": "Wähle aus, ob du alleine oder mit einer Gruppe lernst.",
+    "availableOne": "{count} Platz verfügbar",
+    "availableMany": "{count} Plätze verfügbar",
+    "alone": "Alleine",
+    "aloneText": "Ich checke nur für mich selbst ein.",
+    "group": "Als Gruppe",
+    "groupText": "Ich checke für mehrere Personen gemeinsam ein.",
+    "groupUnavailable": "Für einen Gruppen-Check-in sind mindestens 2 freie Plätze erforderlich.",
+    "groupSizeTitle": "Wie viele Personen seid ihr?",
+    "people": "Personen",
+    "decreaseGroup": "Gruppengröße verkleinern",
+    "increaseGroup": "Gruppengröße erhöhen",
+    "confirmGroup": "Gruppe mit {count} Personen einchecken",
+    "groupSuccessMessage": "Gruppen-Check-in erfolgreich. {count} Personen sind jetzt in Raum {room} eingecheckt.",
+    "cancel": "Abbrechen"
   },
   "sessionPage": {
     "eyebrow": "Sitzung",
@@ -162,7 +198,11 @@
     "extendSuccess": "Aufenthalt erfolgreich verlängert.",
     "checkingOut": "Auschecken...",
     "checkOut": "⇥ Auschecken",
-    "checkOutError": "Check-out fehlgeschlagen."
+    "checkOutError": "Check-out fehlgeschlagen.",
+    "groupBadge": "Gruppe · {count} Personen",
+    "groupSessionTitle": "Gruppen-Check-in",
+    "groupSessionText": "Diese Sitzung gilt für {count} Personen. Beim Checkout wird die gesamte Gruppe ausgecheckt.",
+    "checkOutGroup": "Gruppe auschecken"
   },
   "install": {
     "installing": "Wird geöffnet...",
@@ -187,7 +227,8 @@
     "checkIn": "Check-in",
     "checkOut": "Check-out",
     "automaticEnd": "Automatisch beendet",
-    "timeSuffix": "Uhr"
+    "timeSuffix": "Uhr",
+    "groupVisit": "Gruppe · {count} Personen"
   },
   "footer": {
     "school": "Hochschule Kaiserslautern",

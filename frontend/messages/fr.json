@@ -60,7 +60,8 @@
     "seats": "places",
     "details": "Voir les détails",
     "openDetails": "Ouvrir les détails de la salle",
-    "detailsAria": "Détails de {room}"
+    "detailsAria": "Détails de {room}",
+    "groupPresence": "{groups, plural, one {# groupe} other {# groupes}} · {people, plural, one {# personne} other {# personnes}}"
   },
   "roomDetail": {
     "loadError": "La salle d'étude n'a pas pu être chargée.",
@@ -81,7 +82,9 @@
     "floor": "Étage",
     "status": "Statut",
     "checkIn": "S'enregistrer",
-    "checkInHint": "Scanner le QR code · NFC directement via le tag dans la salle"
+    "checkInHint": "Scanner le QR code · NFC directement via le tag dans la salle",
+    "groupPresence": "{groups, plural, one {# groupe} other {# groupes}} · {people, plural, one {# personne} other {# personnes}}",
+    "groupsInRoom": "Groupes dans la salle"
   },
   "checkInPage": {
     "loadError": "La salle d'étude n'a pas pu être chargée.",
@@ -104,7 +107,24 @@
     "cancel": "Annuler",
     "invalidQr": "Le QR code ne contient pas d'accès valide à une salle.",
     "genericError": "Le check-in n'a pas pu être effectué.",
-    "serverError": "Le serveur n'a pas pu être joint."
+    "serverError": "Le serveur n'a pas pu être joint.",
+    "roomVerified": "Salle identifiée",
+    "wrongRoom": "Le QR code scanné appartient à une autre salle.",
+    "chooseTypeTitle": "Comment souhaites-tu t'enregistrer ?",
+    "chooseTypeText": "Choisis si tu étudies seul ou avec un groupe.",
+    "availableOne": "{count} place disponible",
+    "availableMany": "{count} places disponibles",
+    "alone": "Seul",
+    "aloneText": "Je m'enregistre uniquement pour moi-même.",
+    "group": "En groupe",
+    "groupText": "J'enregistre plusieurs personnes ensemble.",
+    "groupUnavailable": "Au moins 2 places libres sont nécessaires pour un check-in de groupe.",
+    "groupSizeTitle": "Combien de personnes êtes-vous ?",
+    "people": "Personnes",
+    "decreaseGroup": "Réduire la taille du groupe",
+    "increaseGroup": "Augmenter la taille du groupe",
+    "confirmGroup": "Enregistrer le groupe de {count} personnes",
+    "groupSuccessRoom": "Check-in de groupe réussi. {count} personnes sont maintenant enregistrées dans la salle {room}."
   },
   "directCheckIn": {
     "label": "Check-in QR direct",
@@ -125,7 +145,23 @@
     "roomLoadError": "La salle d'étude n'a pas pu être chargée.",
     "genericError": "Le check-in n'a pas pu être effectué.",
     "serverError": "Le serveur n'a pas pu être joint.",
-    "successMessage": "Check-in réussi. Tu es maintenant enregistré dans la salle {room}."
+    "successMessage": "Check-in réussi. Tu es maintenant enregistré dans la salle {room}.",
+    "chooseTypeTitle": "Comment souhaites-tu t'enregistrer ?",
+    "chooseTypeText": "Choisis si tu étudies seul ou avec un groupe.",
+    "availableOne": "{count} place disponible",
+    "availableMany": "{count} places disponibles",
+    "alone": "Seul",
+    "aloneText": "Je m'enregistre uniquement pour moi-même.",
+    "group": "En groupe",
+    "groupText": "J'enregistre plusieurs personnes ensemble.",
+    "groupUnavailable": "Au moins 2 places libres sont nécessaires pour un check-in de groupe.",
+    "groupSizeTitle": "Combien de personnes êtes-vous ?",
+    "people": "Personnes",
+    "decreaseGroup": "Réduire la taille du groupe",
+    "increaseGroup": "Augmenter la taille du groupe",
+    "confirmGroup": "Enregistrer le groupe de {count} personnes",
+    "groupSuccessMessage": "Check-in de groupe réussi. {count} personnes sont maintenant enregistrées dans la salle {room}.",
+    "cancel": "Annuler"
   },
   "sessionPage": {
     "eyebrow": "Session",
@@ -162,7 +198,11 @@
     "extendSuccess": "Session prolongée avec succès.",
     "checkingOut": "Check-out...",
     "checkOut": "⇥ Check-out",
-    "checkOutError": "Le check-out a échoué."
+    "checkOutError": "Le check-out a échoué.",
+    "groupBadge": "Groupe · {count} personnes",
+    "groupSessionTitle": "Check-in de groupe",
+    "groupSessionText": "Cette session concerne {count} personnes. Le check-out fera sortir tout le groupe.",
+    "checkOutGroup": "Faire le check-out du groupe"
   },
   "install": {
     "installing": "Ouverture...",
@@ -187,7 +227,8 @@
     "checkIn": "Check-in",
     "checkOut": "Check-out",
     "automaticEnd": "Terminée automatiquement",
-    "timeSuffix": ""
+    "timeSuffix": "",
+    "groupVisit": "Groupe · {count} personnes"
   },
   "footer": {
     "school": "Hochschule Kaiserslautern",

@@ -60,7 +60,8 @@
     "seats": "seats",
     "details": "View details",
     "openDetails": "Open room details",
-    "detailsAria": "Details for {room}"
+    "detailsAria": "Details for {room}",
+    "groupPresence": "{groups, plural, one {# group} other {# groups}} · {people, plural, one {# person} other {# people}}"
   },
   "roomDetail": {
     "loadError": "The study room could not be loaded.",
@@ -81,7 +82,9 @@
     "floor": "Floor",
     "status": "Status",
     "checkIn": "Check in",
-    "checkInHint": "Scan QR code · NFC directly via the tag in the room"
+    "checkInHint": "Scan QR code · NFC directly via the tag in the room",
+    "groupPresence": "{groups, plural, one {# group} other {# groups}} · {people, plural, one {# person} other {# people}}",
+    "groupsInRoom": "Groups in the room"
   },
   "checkInPage": {
     "loadError": "The study room could not be loaded.",
@@ -104,7 +107,24 @@
     "cancel": "Cancel",
     "invalidQr": "The QR code does not contain a valid room access.",
     "genericError": "The check-in could not be completed.",
-    "serverError": "The server could not be reached."
+    "serverError": "The server could not be reached.",
+    "roomVerified": "Study room identified",
+    "wrongRoom": "The scanned QR code belongs to a different study room.",
+    "chooseTypeTitle": "How would you like to check in?",
+    "chooseTypeText": "Choose whether you are studying alone or with a group.",
+    "availableOne": "{count} seat available",
+    "availableMany": "{count} seats available",
+    "alone": "Alone",
+    "aloneText": "I am checking in only for myself.",
+    "group": "As a group",
+    "groupText": "I am checking in several people together.",
+    "groupUnavailable": "At least 2 available seats are required for a group check-in.",
+    "groupSizeTitle": "How many people are in your group?",
+    "people": "People",
+    "decreaseGroup": "Decrease group size",
+    "increaseGroup": "Increase group size",
+    "confirmGroup": "Check in group of {count}",
+    "groupSuccessRoom": "Group check-in successful. {count} people are now checked into room {room}."
   },
   "directCheckIn": {
     "label": "Direct QR check-in",
@@ -125,7 +145,23 @@
     "roomLoadError": "The study room could not be loaded.",
     "genericError": "The check-in could not be completed.",
     "serverError": "The server could not be reached.",
-    "successMessage": "Check-in successful. You are now checked into room {room}."
+    "successMessage": "Check-in successful. You are now checked into room {room}.",
+    "chooseTypeTitle": "How would you like to check in?",
+    "chooseTypeText": "Choose whether you are studying alone or with a group.",
+    "availableOne": "{count} seat available",
+    "availableMany": "{count} seats available",
+    "alone": "Alone",
+    "aloneText": "I am checking in only for myself.",
+    "group": "As a group",
+    "groupText": "I am checking in several people together.",
+    "groupUnavailable": "At least 2 available seats are required for a group check-in.",
+    "groupSizeTitle": "How many people are in your group?",
+    "people": "People",
+    "decreaseGroup": "Decrease group size",
+    "increaseGroup": "Increase group size",
+    "confirmGroup": "Check in group of {count}",
+    "groupSuccessMessage": "Group check-in successful. {count} people are now checked into room {room}.",
+    "cancel": "Cancel"
   },
   "sessionPage": {
     "eyebrow": "Session",
@@ -162,7 +198,11 @@
     "extendSuccess": "Stay successfully extended.",
     "checkingOut": "Checking out...",
     "checkOut": "⇥ Check out",
-    "checkOutError": "Check-out failed."
+    "checkOutError": "Check-out failed.",
+    "groupBadge": "Group · {count} people",
+    "groupSessionTitle": "Group check-in",
+    "groupSessionText": "This session is for {count} people. Checking out will check out the entire group.",
+    "checkOutGroup": "Check out group"
   },
   "install": {
     "installing": "Opening...",
@@ -187,7 +227,8 @@
     "checkIn": "Check-in",
     "checkOut": "Check-out",
     "automaticEnd": "Ended automatically",
-    "timeSuffix": ""
+    "timeSuffix": "",
+    "groupVisit": "Group · {count} people"
   },
   "footer": {
     "school": "Kaiserslautern University of Applied Sciences",

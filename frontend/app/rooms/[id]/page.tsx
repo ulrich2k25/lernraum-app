@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 import type { Room } from "../../../types/room";
+import RoomDetailAutoRefresh from "../../../components/RoomDetailAutoRefresh";
 
 type RoomDetailPageProps = {
   params: Promise<{
@@ -33,6 +34,7 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
 
   return (
     <main className="min-h-screen bg-[#F4F8FA] pb-8 text-[#102A43]">
+      <RoomDetailAutoRefresh />
       <div className="mx-auto w-full max-w-4xl px-4 py-5 sm:px-6 md:px-8 lg:py-10">
         <Link
           href="/"

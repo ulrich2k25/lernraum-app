@@ -32,33 +32,99 @@ export default function CurrentSession() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+    let requestInProgress = false;
+    let initialLoadCompleted = false;
+
     async function loadCurrentSession() {
+      if (document.hidden || requestInProgress) {
+        return;
+      }
+
+      requestInProgress = true;
+
       try {
-        setError(null);
         const clientId = localStorage.getItem("lernraum-client-id");
+
         if (!clientId) {
           setSession(null);
+          setError(null);
           return;
         }
+
         const response = await fetch(
           `${API_URL}/sessions/current/${encodeURIComponent(clientId)}`,
-          { cache: "no-store" },
+          {
+            cache: "no-store",
+            signal: controller.signal,
+          },
         );
-        if (!response.ok) throw new Error(t("loadError"));
+
+        if (!response.ok) {
+          throw new Error(t("loadError"));
+        }
+
         const text = await response.text();
-        if (!text) {
-          setSession(null);
+
+        const updatedSession = text
+          ? (JSON.parse(text) as ActiveSession | null)
+          : null;
+
+        if (controller.signal.aborted) {
           return;
         }
-        setSession(JSON.parse(text) as ActiveSession | null);
+
+        setSession((current) => {
+          if (
+            current?.id === updatedSession?.id &&
+            current?.expiresAt === updatedSession?.expiresAt &&
+            current?.status === updatedSession?.status &&
+            current?.groupSize === updatedSession?.groupSize
+          ) {
+            return current;
+          }
+
+          return updatedSession;
+        });
+
+        setError(null);
       } catch (error) {
-        console.error("Current session error:", error);
-        setError(t("loadError"));
+        if (!controller.signal.aborted) {
+          console.error("Current session error:", error);
+
+          if (!initialLoadCompleted) {
+            setError(t("loadError"));
+          }
+        }
       } finally {
-        setLoading(false);
+        requestInProgress = false;
+
+        if (!controller.signal.aborted) {
+          initialLoadCompleted = true;
+          setLoading(false);
+        }
       }
     }
+
     void loadCurrentSession();
+
+    const interval = window.setInterval(() => {
+      void loadCurrentSession();
+    }, 5000);
+
+    function handleVisibilityChange() {
+      if (!document.hidden) {
+        void loadCurrentSession();
+      }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      controller.abort();
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [t]);
 
   if (loading) {

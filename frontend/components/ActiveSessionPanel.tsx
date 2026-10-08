@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -67,6 +67,7 @@ export default function ActiveSessionPanel({
   }
 
   const [expiresAt, setExpiresAt] = useState(session.expiresAt);
+  const expiresAtRef = useRef(session.expiresAt);
   const [remainingTime, setRemainingTime] = useState("");
 
   const [isExtending, setIsExtending] = useState(false);
@@ -90,7 +91,15 @@ export default function ActiveSessionPanel({
   const [notificationError, setNotificationError] = useState<string | null>(
     null,
   );
+  useEffect(() => {
+    const serverExpiry = new Date(session.expiresAt).getTime();
+    const currentExpiry = new Date(expiresAtRef.current).getTime();
 
+    if (serverExpiry > currentExpiry) {
+      expiresAtRef.current = session.expiresAt;
+      setExpiresAt(session.expiresAt);
+    }
+  }, [session.expiresAt]);
   useEffect(() => {
     const updateRemainingTime = () => {
       setRemainingTime(formatRemainingTime(expiresAt, Date.now()));
@@ -219,6 +228,7 @@ export default function ActiveSessionPanel({
         throw new Error(t("newDurationError"));
       }
 
+      expiresAtRef.current = data.session.expiresAt;
       setExpiresAt(data.session.expiresAt);
 
       setRemainingTime(formatRemainingTime(data.session.expiresAt, Date.now()));

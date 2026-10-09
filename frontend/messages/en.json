@@ -325,5 +325,26 @@
     "noticeTitle": "Good to know",
     "noticeDescription": "Lernraum is not a reservation system. Displayed occupancy is based on recorded check-ins and check-outs.",
     "back": "View study rooms"
+  },
+  "feedback": {
+    "navLabel": "Give feedback",
+    "back": "Back to study rooms",
+    "eyebrow": "Your opinion matters",
+    "title": "Give feedback",
+    "description": "Help us improve Lernraum. Share your experience, ideas or suggestions.",
+    "ratingTitle": "How do you like Lernraum?",
+    "ratingDescription": "Choose the option that best describes your experience.",
+    "positive": "Positive",
+    "negative": "Needs improvement",
+    "messageLabel": "Your message (optional)",
+    "messageHint": "What do you like most, or what could we improve?",
+    "messagePlaceholder": "Write your feedback here ...",
+    "anonymous": "Your feedback is submitted anonymously.",
+    "submit": "Send feedback",
+    "sending": "Sending ...",
+    "successTitle": "Thank you for your feedback!",
+    "successText": "Your feedback has been submitted successfully and will help us improve Lernraum.",
+    "backToRooms": "Back to study rooms",
+    "error": "Your feedback could not be sent. Please try again."
   }
 }

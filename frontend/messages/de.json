@@ -325,5 +325,26 @@
     "noticeTitle": "Gut zu wissen",
     "noticeDescription": "Lernraum ist kein Reservierungssystem. Die angezeigte Belegung basiert auf den erfassten Check-ins und Check-outs.",
     "back": "Lernräume anzeigen"
+  },
+  "feedback": {
+    "navLabel": "Feedback geben",
+    "back": "Zurück zu den Lernräumen",
+    "eyebrow": "Deine Meinung zählt",
+    "title": "Feedback geben",
+    "description": "Hilf uns, Lernraum zu verbessern. Teile deine Erfahrungen, Ideen oder Verbesserungsvorschläge mit uns.",
+    "ratingTitle": "Wie gefällt dir Lernraum?",
+    "ratingDescription": "Wähle die Antwort aus, die am besten zu deiner Erfahrung passt.",
+    "positive": "Positiv",
+    "negative": "Verbesserung nötig",
+    "messageLabel": "Deine Nachricht (optional)",
+    "messageHint": "Was gefällt dir besonders gut oder was können wir verbessern?",
+    "messagePlaceholder": "Schreibe hier dein Feedback ...",
+    "anonymous": "Dein Feedback wird anonym übermittelt.",
+    "submit": "Feedback senden",
+    "sending": "Wird gesendet ...",
+    "successTitle": "Vielen Dank für dein Feedback!",
+    "successText": "Deine Rückmeldung wurde erfolgreich übermittelt und hilft uns, Lernraum weiterzuentwickeln.",
+    "backToRooms": "Zu den Lernräumen",
+    "error": "Dein Feedback konnte nicht gesendet werden. Bitte versuche es erneut."
   }
 }

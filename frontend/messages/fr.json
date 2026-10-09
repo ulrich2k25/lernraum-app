@@ -325,5 +325,26 @@
     "noticeTitle": "Bon à savoir",
     "noticeDescription": "Lernraum n'est pas un système de réservation. L'occupation affichée repose sur les enregistrements d'entrée et de sortie.",
     "back": "Voir les salles"
+  },
+  "feedback": {
+    "navLabel": "Donner un avis",
+    "back": "Retour aux salles",
+    "eyebrow": "Ton avis compte",
+    "title": "Donner ton avis",
+    "description": "Aide-nous à améliorer Lernraum. Partage ton expérience, tes idées ou tes suggestions.",
+    "ratingTitle": "Que penses-tu de Lernraum ?",
+    "ratingDescription": "Choisis l'option qui correspond le mieux à ton expérience.",
+    "positive": "Positif",
+    "negative": "À améliorer",
+    "messageLabel": "Ton message (facultatif)",
+    "messageHint": "Qu'apprécies-tu particulièrement ou que pouvons-nous améliorer ?",
+    "messagePlaceholder": "Écris ton avis ici ...",
+    "anonymous": "Ton avis est envoyé anonymement.",
+    "submit": "Envoyer mon avis",
+    "sending": "Envoi en cours ...",
+    "successTitle": "Merci pour ton avis !",
+    "successText": "Ton avis a bien été envoyé et nous aidera à améliorer Lernraum.",
+    "backToRooms": "Retour aux salles",
+    "error": "Impossible d'envoyer ton avis. Réessaie."
   }
 }

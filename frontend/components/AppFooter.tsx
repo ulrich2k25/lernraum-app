@@ -21,8 +21,15 @@ export default function AppFooter() {
         ? "Protection des données"
         : "Datenschutz";
 
+  const feedbackLabel =
+    locale === "en"
+      ? "Give feedback"
+      : locale === "fr"
+        ? "Donner un avis"
+        : "Feedback geben";
+
   return (
-    <footer className="mx-auto hidden w-full max-w-6xl px-4 sm:px-6 md:block md:px-8">
+    <footer className="mx-auto w-full max-w-6xl px-4 sm:px-6 md:px-8">
       <div className="flex flex-col gap-5 rounded-[24px] border border-[#1C4765] bg-[#102A43] px-6 py-7 lg:px-8">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <div className="flex items-center gap-3">
@@ -55,6 +62,7 @@ export default function AppFooter() {
             aria-label="Footer"
             className="flex flex-wrap items-center gap-x-6 gap-y-3"
           >
+            {/* Hilfe */}
             <Link
               href="/hilfe"
               className="text-sm font-semibold text-[#D5E7EE] transition hover:text-[#5EEAD4]"
@@ -62,6 +70,15 @@ export default function AppFooter() {
               {help("title")}
             </Link>
 
+            {/* Feedback */}
+            <Link
+              href="/feedback"
+              className="text-sm font-semibold text-[#D5E7EE] transition hover:text-[#5EEAD4]"
+            >
+              {feedbackLabel}
+            </Link>
+
+            {/* Datenschutz */}
             <Link
               href="/datenschutz"
               className="text-sm font-semibold text-[#D5E7EE] transition hover:text-[#5EEAD4]"

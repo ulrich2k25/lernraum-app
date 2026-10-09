@@ -146,6 +146,15 @@ export default function AdminRoomsPage() {
                 <LanguageSwitcher />
               </div>
 
+              {/* FEEDBACK */}
+              <Link
+                href="/admin/feedback"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
+              >
+                <span aria-hidden="true">💬</span>
+                Feedback
+              </Link>
+
               {/* ADD ROOM */}
               <Link
                 href="/admin/rooms/new"

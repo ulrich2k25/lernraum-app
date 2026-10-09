@@ -145,9 +145,7 @@ export default function AdminFeedbackPage() {
         return;
       }
 
-      if (showLoading) {
-        setLoading(true);
-      } else {
+      if (!showLoading) {
         setRefreshing(true);
       }
 
@@ -208,7 +206,7 @@ export default function AdminFeedbackPage() {
   useEffect(() => {
     const controller = new AbortController();
 
-    void loadFeedback(true, controller.signal);
+    void Promise.resolve().then(() => loadFeedback(true, controller.signal));
 
     return () => {
       controller.abort();

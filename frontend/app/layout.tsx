@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 
 import AppFooter from "@/components/AppFooter";
+import ClientIdentityInitializer from "@/components/ClientIdentityInitializer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -79,6 +80,8 @@ export default async function RootLayout({
         </Script>
 
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <ClientIdentityInitializer />
+
           <div className="flex flex-1 flex-col">{children}</div>
 
           <div className="pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">

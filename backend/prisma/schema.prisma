@@ -50,6 +50,11 @@ model PushSubscription {
 
   @@index([clientId])
 }
+model ClientIdentity {
+  clientId   String   @id
+  secretHash String
+  createdAt  DateTime @default(now())
+}
 
 model AdminUser {
   id           Int      @id @default(autoincrement())

@@ -3,11 +3,25 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CheckInDto } from './dto/check-in.dto';
 import { CheckOutDto } from './dto/check-out.dto';
 import { ExtendSessionDto } from './dto/extend-session.dto';
+import { ClientDataService } from './client-data.service';
 import { SessionsService } from './sessions.service';
 
 @Controller('sessions')
 export class SessionsController {
-  constructor(private readonly sessionsService: SessionsService) {}
+  constructor(
+    private readonly sessionsService: SessionsService,
+    private readonly clientDataService: ClientDataService,
+  ) {}
+
+  @Post('identity')
+  registerIdentity(@Body() dto: { clientId: string; secret: string }) {
+    return this.clientDataService.register(dto.clientId, dto.secret);
+  }
+
+  @Post('delete-my-data')
+  deleteMyData(@Body() dto: { clientId: string; secret: string }) {
+    return this.clientDataService.deleteMyData(dto.clientId, dto.secret);
+  }
 
   @Post('check-in')
   checkIn(@Body() dto: CheckInDto) {

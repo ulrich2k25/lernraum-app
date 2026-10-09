@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import DeleteMyData from "@/components/DeleteMyData";
 
 type Visit = {
   id: number;
@@ -201,6 +202,7 @@ export default function BesuchePage() {
           })}
         </div>
       )}
+      <DeleteMyData />
     </main>
   );
 }

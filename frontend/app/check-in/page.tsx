@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import type { Room } from "@/types/room";
-import { getClientId } from "@/lib/client-id";
+import { getClientId, registerClientIdentity } from "@/lib/client-id";
 
 type PageStatus = "loading" | "selection" | "checking" | "success" | "error";
 
@@ -146,6 +146,9 @@ export default function DirectCheckInPage() {
     setStatus("checking");
 
     try {
+      // Enregistrer une nouvelle identité avant le premier check-in.
+      // Les anciennes identités restent utilisables sans modification.
+      await registerClientIdentity();
       const clientId = getClientId();
 
       const response = await fetch(`${API_URL}/sessions/check-in`, {

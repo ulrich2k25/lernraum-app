@@ -14,6 +14,7 @@ import { ExtendSessionDto } from './dto/extend-session.dto';
 
 const SESSION_DURATION_MINUTES = 120;
 const REMINDER_MINUTES_BEFORE_EXPIRY = 10;
+const SESSION_RETENTION_DAYS = 30;
 
 @Injectable()
 export class SessionsService {
@@ -21,6 +22,31 @@ export class SessionsService {
     private readonly prisma: PrismaService,
     private readonly pushNotificationsService: PushNotificationsService,
   ) {}
+
+  // Supprime chaque nuit les sessions terminées depuis plus de 30 jours.
+  @Cron('0 3 * * *', { timeZone: 'Europe/Berlin' })
+  async deleteOldSessions() {
+    const cutoffDate = new Date(
+      Date.now() - SESSION_RETENTION_DAYS * 24 * 60 * 60 * 1000,
+    );
+
+    const result = await this.prisma.session.deleteMany({
+      where: {
+        OR: [
+          {
+            status: 'ENDED',
+            endedAt: { lt: cutoffDate },
+          },
+          {
+            status: 'EXPIRED',
+            expiresAt: { lt: cutoffDate },
+          },
+        ],
+      },
+    });
+
+    return { deletedSessions: result.count };
+  }
 
   @Cron(CronExpression.EVERY_MINUTE)
   async sendSessionReminders() {

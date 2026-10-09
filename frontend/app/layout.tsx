@@ -56,7 +56,7 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-[#F4F8FA]">
-        <Script id="lernraum-pwa-install-capture" strategy="beforeInteractive">
+        <Script id="lernraum-pwa-install-capture" strategy="afterInteractive">
           {`
             window.__lernraumInstallPrompt = null;
             window.__lernraumAppInstalled = false;

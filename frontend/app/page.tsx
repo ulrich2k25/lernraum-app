@@ -12,7 +12,7 @@ export default async function Home() {
   const rooms: Room[] = await response.json();
 
   return (
-    <main className="bg-[#F4F8FA] text-[#102A43]">
+    <main className="bg-[#E8F0F5] text-[#102A43] md:bg-[#F4F8FA]">
       <div className="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6 md:px-8 lg:py-7">
         <AppHeader roomCount={rooms.length} />
 

@@ -84,7 +84,16 @@ export default async function RootLayout({
 
           <div className="flex flex-1 flex-col">{children}</div>
 
-          <div className="pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">
+          <div
+            className="
+    border-t border-[#CFDDE5]
+    pt-5
+    pb-[calc(5.5rem+env(safe-area-inset-bottom))]
+    md:border-0
+    md:pt-0
+    md:pb-0
+  "
+          >
             <AppFooter />
           </div>
         </NextIntlClientProvider>

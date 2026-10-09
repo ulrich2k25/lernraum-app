@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { useLocale } from "next-intl";
+
 import { getClientCredentials } from "@/lib/client-id";
 
 const translations = {
   de: {
     title: "Meine Daten verwalten",
     description:
-      "Du kannst deine gespeicherten Besuche und Push-Benachrichtigungen dauerhaft löschen.",
+      "Du entscheidest, welche Daten gespeichert bleiben. Deine abgeschlossenen Besuche werden nach 30 Tagen automatisch gelöscht.",
     button: "Meine Daten löschen",
     confirm:
       "Möchtest du wirklich alle deine gespeicherten Daten löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
@@ -17,11 +18,12 @@ const translations = {
     error: "Die Daten konnten nicht gelöscht werden. Bitte versuche es erneut.",
     legacy:
       "Für diese ältere Browserkennung ist die direkte Löschung noch nicht verfügbar. Abgeschlossene Besuche werden nach 30 Tagen automatisch gelöscht.",
+    privacy: "Mehr zum Datenschutz",
   },
   en: {
     title: "Manage my data",
     description:
-      "You can permanently delete your saved visits and push notification subscriptions.",
+      "You control your stored data. Completed visits are automatically deleted after 30 days.",
     button: "Delete my data",
     confirm:
       "Do you really want to delete all your saved data? This action cannot be undone.",
@@ -30,11 +32,12 @@ const translations = {
     error: "Your data could not be deleted. Please try again.",
     legacy:
       "Direct deletion is not yet available for this older browser identifier. Completed visits are automatically deleted after 30 days.",
+    privacy: "Learn about privacy",
   },
   fr: {
     title: "Gérer mes données",
     description:
-      "Tu peux supprimer définitivement tes visites et tes abonnements aux notifications.",
+      "Tu gardes le contrôle de tes données. Les visites terminées sont automatiquement supprimées après 30 jours.",
     button: "Supprimer mes données",
     confirm:
       "Veux-tu vraiment supprimer toutes tes données enregistrées ? Cette action est irréversible.",
@@ -43,8 +46,44 @@ const translations = {
     error: "Impossible de supprimer les données. Réessaie.",
     legacy:
       "La suppression directe n'est pas encore disponible pour cet ancien identifiant. Les visites terminées sont automatiquement supprimées après 30 jours.",
+    privacy: "En savoir plus sur la confidentialité",
   },
 };
+
+function ShieldIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-6 w-6"
+      aria-hidden="true"
+    >
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+      aria-hidden="true"
+    >
+      <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7" />
+    </svg>
+  );
+}
 
 export default function DeleteMyData() {
   const locale = useLocale();
@@ -96,7 +135,7 @@ export default function DeleteMyData() {
             await subscription.unsubscribe();
           }
         } catch {
-          // Les données côté serveur ont déjà été supprimées.
+          // Les données serveur ont déjà été supprimées.
         }
       }
 
@@ -106,7 +145,6 @@ export default function DeleteMyData() {
       setSuccess(true);
       setHasCredentials(false);
 
-      // Actualiser l'historique après la suppression.
       window.location.reload();
     } catch {
       setError(true);
@@ -116,49 +154,71 @@ export default function DeleteMyData() {
   }
 
   return (
-    <section className="mt-10 rounded-2xl border border-[#D9E7EC] bg-white p-6 shadow-sm">
-      <h2 className="text-xl font-bold text-[#102A43]">{t.title}</h2>
+    <section className="mt-8 overflow-hidden rounded-[24px] border border-[#D9E7EC] bg-white shadow-[0_6px_24px_rgba(16,42,67,0.035)]">
+      <div className="flex flex-col gap-5 p-5 sm:flex-row sm:items-start sm:gap-6 sm:p-7">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#EAF7F7] text-[#087F83]">
+          <ShieldIcon />
+        </div>
 
-      <p className="mt-2 text-sm leading-6 text-slate-600">{t.description}</p>
+        <div className="min-w-0 flex-1">
+          <h2 className="text-lg font-extrabold tracking-tight text-[#102A43] sm:text-xl">
+            {t.title}
+          </h2>
 
-      {hasCredentials === null && (
-        <button
-          type="button"
-          onClick={checkCredentials}
-          className="mt-5 rounded-xl border border-[#D9E7EC] px-4 py-2.5 text-sm font-semibold text-[#102A43] hover:bg-slate-50"
-        >
-          {t.button}
-        </button>
-      )}
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+            {t.description}
+          </p>
 
-      {hasCredentials === false && !success && (
-        <p className="mt-4 rounded-xl bg-amber-50 p-4 text-sm text-amber-800">
-          {t.legacy}
-        </p>
-      )}
+          <div className="mt-5 flex flex-wrap items-center gap-4">
+            {hasCredentials === null && (
+              <button
+                type="button"
+                onClick={checkCredentials}
+                className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-bold text-red-600 transition hover:border-red-300 hover:bg-red-50"
+              >
+                <TrashIcon />
+                {t.button}
+              </button>
+            )}
 
-      {hasCredentials === true && (
-        <button
-          type="button"
-          onClick={() => void deleteData()}
-          disabled={loading}
-          className="mt-5 rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm font-semibold text-red-700 transition hover:bg-red-100 disabled:opacity-50"
-        >
-          {loading ? t.deleting : t.button}
-        </button>
-      )}
+            {hasCredentials === true && (
+              <button
+                type="button"
+                onClick={() => void deleteData()}
+                disabled={loading}
+                className="inline-flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-bold text-red-700 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <TrashIcon />
+                {loading ? t.deleting : t.button}
+              </button>
+            )}
+          </div>
 
-      {error && (
-        <p role="alert" className="mt-4 text-sm text-red-700">
-          {t.error}
-        </p>
-      )}
+          {hasCredentials === false && !success && (
+            <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-800">
+              {t.legacy}
+            </p>
+          )}
 
-      {success && (
-        <p role="status" className="mt-4 text-sm text-emerald-700">
-          {t.success}
-        </p>
-      )}
+          {error && (
+            <p
+              role="alert"
+              className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+            >
+              {t.error}
+            </p>
+          )}
+
+          {success && (
+            <p
+              role="status"
+              className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700"
+            >
+              {t.success}
+            </p>
+          )}
+        </div>
+      </div>
     </section>
   );
 }

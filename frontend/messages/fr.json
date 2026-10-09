@@ -310,5 +310,20 @@
     "pdfTitle": "Salle {room}",
     "pdfScan": "Scanner pour s'enregistrer",
     "pdfHint": "Avec la caméra du smartphone ou l'application Lernraum"
+  },
+  "help": {
+    "title": "Comment ça marche",
+    "description": "Trouvez une place libre en quelques étapes.",
+    "findTitle": "Trouver une salle",
+    "findDescription": "Consultez les salles disponibles et le nombre de places libres. Choisissez la salle qui vous convient.",
+    "checkInTitle": "S'enregistrer",
+    "checkInDescription": "Scannez le QR code ou le tag NFC à l'entrée de la salle. Indiquez si vous êtes seul ou en groupe.",
+    "sessionTitle": "Utiliser sa place",
+    "sessionDescription": "Votre session dure deux heures. Vous pouvez la prolonger si nécessaire.",
+    "checkOutTitle": "Terminer sa session",
+    "checkOutDescription": "Terminez votre session en quittant la salle pour libérer les places. Elle se termine également automatiquement à son expiration.",
+    "noticeTitle": "Bon à savoir",
+    "noticeDescription": "Lernraum n'est pas un système de réservation. L'occupation affichée repose sur les enregistrements d'entrée et de sortie.",
+    "back": "Voir les salles"
   }
 }

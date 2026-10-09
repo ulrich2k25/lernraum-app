@@ -310,5 +310,20 @@
     "pdfTitle": "Study room {room}",
     "pdfScan": "Scan to check in",
     "pdfHint": "Use smartphone camera or Lernraum app"
+  },
+  "help": {
+    "title": "How it works",
+    "description": "Find an available study space in just a few steps.",
+    "findTitle": "Find a study room",
+    "findDescription": "Browse available study rooms and see how many seats are currently free. Choose a suitable room.",
+    "checkInTitle": "Check in",
+    "checkInDescription": "Scan the QR code or NFC tag at the room entrance. Select whether you are checking in alone or as a group.",
+    "sessionTitle": "Use your study space",
+    "sessionDescription": "Your session lasts two hours. You can extend it if needed.",
+    "checkOutTitle": "Check out",
+    "checkOutDescription": "Check out when leaving so your seats become available again. Your session also ends automatically when it expires.",
+    "noticeTitle": "Good to know",
+    "noticeDescription": "Lernraum is not a reservation system. Displayed occupancy is based on recorded check-ins and check-outs.",
+    "back": "View study rooms"
   }
 }

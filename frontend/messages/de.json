@@ -310,5 +310,20 @@
     "pdfTitle": "Lernraum {room}",
     "pdfScan": "Zum Einchecken scannen",
     "pdfHint": "Mit Smartphone-Kamera oder Lernraum-App"
+  },
+  "help": {
+    "title": "So funktioniert's",
+    "description": "In wenigen Schritten zum freien Lernplatz.",
+    "findTitle": "Lernraum finden",
+    "findDescription": "Sieh dir die verfügbaren Lernräume und die aktuell freien Plätze an. Wähle einen passenden Raum aus.",
+    "checkInTitle": "Einchecken",
+    "checkInDescription": "Scanne den QR-Code oder NFC-Tag am Raumeingang. Gib an, ob du alleine oder als Gruppe eincheckst.",
+    "sessionTitle": "Lernplatz nutzen",
+    "sessionDescription": "Deine Sitzung dauert zwei Stunden. Bei Bedarf kannst du sie verlängern.",
+    "checkOutTitle": "Auschecken",
+    "checkOutDescription": "Checke beim Verlassen des Raums aus, damit die Plätze wieder als frei angezeigt werden. Nach Ablauf der Sitzung erfolgt der Check-out automatisch.",
+    "noticeTitle": "Gut zu wissen",
+    "noticeDescription": "Lernraum ist kein Reservierungssystem. Die angezeigte Belegung basiert auf den erfassten Check-ins und Check-outs.",
+    "back": "Lernräume anzeigen"
   }
 }

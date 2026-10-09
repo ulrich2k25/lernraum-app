@@ -12,8 +12,8 @@ export default async function Home() {
   const rooms: Room[] = await response.json();
 
   return (
-    <main className="min-h-screen bg-[#F4F8FA] pb-24 text-[#102A43] md:pb-0">
-      <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 md:px-8 lg:py-10">
+    <main className="bg-[#F4F8FA] text-[#102A43]">
+      <div className="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6 md:px-8 lg:py-7">
         <AppHeader roomCount={rooms.length} />
 
         <AppNavigation />
@@ -21,8 +21,7 @@ export default async function Home() {
         <HomeHero />
 
         <RoomsOverview rooms={rooms} />
-</div>
+      </div>
     </main>
   );
 }
-

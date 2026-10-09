@@ -54,7 +54,7 @@ export default async function RootLayout({
       lang={locale}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col bg-[#F4F8FA]">
         <Script id="lernraum-pwa-install-capture" strategy="beforeInteractive">
           {`
             window.__lernraumInstallPrompt = null;
@@ -79,9 +79,11 @@ export default async function RootLayout({
         </Script>
 
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <div className="flex flex-1 flex-col pb-20 md:pb-0">{children}</div>
+          <div className="flex flex-1 flex-col">{children}</div>
 
-          <AppFooter />
+          <div className="pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-0">
+            <AppFooter />
+          </div>
         </NextIntlClientProvider>
       </body>
     </html>

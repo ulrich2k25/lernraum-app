@@ -75,7 +75,7 @@ export default function LiveRoomsGrid({
 
   return (
     <>
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6">
         {rooms.map((room) => (
           <RoomCard key={room.id} room={room} />
         ))}

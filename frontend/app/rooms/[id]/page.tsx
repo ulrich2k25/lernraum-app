@@ -15,7 +15,7 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
   const t = await getTranslations("roomDetail");
   const { id } = await params;
 
-  const response = await fetch(`http://localhost:3002/rooms/${id}`, {
+  const response = await fetch(`${process.env.BACKEND_URL ?? "http://localhost:3002"}/rooms/${id}`, {
     cache: "no-store",
   });
 

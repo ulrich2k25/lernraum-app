@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin();
+
 const devAllowedOrigin = process.env.DEV_ALLOWED_ORIGIN;
+
+const backendUrl = process.env.BACKEND_URL ?? "http://127.0.0.1:3002";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: [
@@ -14,7 +17,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://127.0.0.1:3002/:path*",
+        destination: `${backendUrl}/:path*`,
       },
     ];
   },

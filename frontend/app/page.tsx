@@ -5,7 +5,7 @@ import HomeHero from "../components/HomeHero";
 import RoomsOverview from "../components/RoomsOverview";
 
 export default async function Home() {
-  const response = await fetch("http://localhost:3002/rooms", {
+  const response = await fetch(`${process.env.BACKEND_URL ?? "http://localhost:3002"}/rooms`, {
     cache: "no-store",
   });
 

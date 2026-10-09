@@ -10,7 +10,7 @@ type CheckInPageProps = { params: Promise<{ id: string }> };
 export default async function CheckInPage({ params }: CheckInPageProps) {
   const t = await getTranslations("checkInPage");
   const { id } = await params;
-  const response = await fetch(`http://localhost:3002/rooms/${id}`, { cache: "no-store" });
+  const response = await fetch(`${process.env.BACKEND_URL ?? "http://localhost:3002"}/rooms/${id}`, { cache: "no-store" });
   if (response.status === 404) notFound();
   if (!response.ok) throw new Error(t("loadError"));
   const room: Room = await response.json();

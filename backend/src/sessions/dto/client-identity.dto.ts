@@ -1,7 +1,11 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CheckOutDto {
+export class ClientIdentityDto {
   @IsString()
   @IsNotEmpty()
   clientId!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  secret!: string;
 }

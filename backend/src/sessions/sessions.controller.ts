@@ -1,3 +1,4 @@
+import { ClientIdentityDto } from './dto/client-identity.dto';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 import { CheckInDto } from './dto/check-in.dto';
@@ -14,12 +15,12 @@ export class SessionsController {
   ) {}
 
   @Post('identity')
-  registerIdentity(@Body() dto: { clientId: string; secret: string }) {
+  registerIdentity(@Body() dto: ClientIdentityDto) {
     return this.clientDataService.register(dto.clientId, dto.secret);
   }
 
   @Post('delete-my-data')
-  deleteMyData(@Body() dto: { clientId: string; secret: string }) {
+  deleteMyData(@Body() dto: ClientIdentityDto) {
     return this.clientDataService.deleteMyData(dto.clientId, dto.secret);
   }
 

@@ -1,3 +1,4 @@
+import { UpdateRoomStatusDto } from './dto/update-room-status.dto';
 import {
   Body,
   Controller,
@@ -39,7 +40,7 @@ export class AdminRoomsController {
   @Patch(':id/status')
   updateStatus(
     @Param('id', ParseIntPipe) id: number,
-    @Body() body: { status: 'ACTIVE' | 'INACTIVE' },
+    @Body() body: UpdateRoomStatusDto,
   ) {
     return this.roomsService.updateStatus(id, body.status);
   }

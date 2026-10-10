@@ -155,6 +155,14 @@ export default function AdminRoomsPage() {
                 Feedback
               </Link>
 
+              {/* STATISTICS */}
+              <Link
+                href="/admin/statistics"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
+              >
+                Statistiken
+              </Link>
+
               {/* ADD ROOM */}
               <Link
                 href="/admin/rooms/new"

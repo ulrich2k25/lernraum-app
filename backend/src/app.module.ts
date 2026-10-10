@@ -10,6 +10,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { PushNotificationsModule } from './push-notifications/push-notifications.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { SessionsModule } from './sessions/sessions.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SessionsModule } from './sessions/sessions.module';
     AdminAuthModule,
     PushNotificationsModule,
     FeedbackModule,
+    StatisticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

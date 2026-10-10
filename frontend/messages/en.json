@@ -208,7 +208,7 @@
     "installing": "Opening...",
     "install": "Install app",
     "iosTitle": "On iPhone / iPad",
-    "iosText": "In Safari, tap “Share” and then “Add to Home Screen”.",
+    "iosText": "Open Lernraum in Safari.|Tap the Share icon (square with an upward arrow).|Select “Add to Home Screen”.|Tap “Add”, then open Lernraum using its new Home Screen icon.",
     "androidTitle": "Install via browser",
     "androidText": "Open the browser menu ⋮ and select “Install” or “Install app”."
   },

@@ -61,7 +61,11 @@ function isCheckInPage(pathname: string) {
   return pathname === "/check-in" || pathname.endsWith("/check-in");
 }
 
-export default function InstallAppPrompt() {
+export default function InstallAppPrompt({
+  showManualButton = true,
+}: {
+  showManualButton?: boolean;
+}) {
   const t = useTranslations("install");
   const pathname = usePathname();
 
@@ -265,7 +269,7 @@ export default function InstallAppPrompt() {
   return (
     <>
       {/* BOUTON D'INSTALLATION EXISTANT */}
-      {!showIosHelp && !showAndroidHelp && (
+      {showManualButton && !showIosHelp && !showAndroidHelp && (
         <div className="mb-4 flex justify-end">
           <button
             type="button"

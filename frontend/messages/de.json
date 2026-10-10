@@ -208,7 +208,7 @@
     "installing": "Wird geöffnet...",
     "install": "App installieren",
     "iosTitle": "Auf iPhone / iPad",
-    "iosText": "Tippe in Safari auf „Teilen“ und anschließend auf „Zum Home-Bildschirm“.",
+    "iosText": "Öffne Lernraum in Safari.|Tippe auf das Teilen-Symbol (Quadrat mit Pfeil nach oben).|Wähle „Zum Home-Bildschirm“.|Tippe auf „Hinzufügen“ und öffne Lernraum über das neue App-Symbol.",
     "androidTitle": "Installation über den Browser",
     "androidText": "Öffne das Browser-Menü ⋮ und wähle „Installieren“ oder „App installieren“."
   },
@@ -346,5 +346,6 @@
     "successText": "Deine Rückmeldung wurde erfolgreich übermittelt und hilft uns, Lernraum weiterzuentwickeln.",
     "backToRooms": "Zu den Lernräumen",
     "error": "Dein Feedback konnte nicht gesendet werden. Bitte versuche es erneut."
-  }
+  },
+  "iosText": "Öffne Lernraum in Safari.|Tippe auf das Teilen-Symbol (Quadrat mit Pfeil nach oben).|Wähle „Zum Home-Bildschirm“.|Tippe auf „Hinzufügen“ und öffne Lernraum über das neue App-Symbol."
 }

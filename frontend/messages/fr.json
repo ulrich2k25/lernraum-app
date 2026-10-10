@@ -208,9 +208,9 @@
     "installing": "Ouverture...",
     "install": "Installer l'application",
     "iosTitle": "Sur iPhone / iPad",
-    "iosText": "Dans Safari, appuie sur « Partager », puis sur « Sur l'écran d'accueil ».",
     "androidTitle": "Installation via le navigateur",
-    "androidText": "Ouvre le menu du navigateur ⋮ puis choisis « Installer » ou « Installer l'application »."
+    "androidText": "Ouvre le menu du navigateur ⋮ puis choisis « Installer » ou « Installer l'application ».",
+    "iosText": "Ouvre Lernraum dans Safari.|Appuie sur l’icône Partager (carré avec une flèche vers le haut).|Sélectionne « Sur l’écran d’accueil ».|Appuie sur « Ajouter », puis ouvre Lernraum depuis sa nouvelle icône."
   },
   "visits": {
     "back": "Retour aux salles d'étude",

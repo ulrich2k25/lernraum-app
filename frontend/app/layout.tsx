@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 
 import AppFooter from "@/components/AppFooter";
+import InstallAppPrompt from "@/components/InstallAppPrompt";
 import ClientIdentityInitializer from "@/components/ClientIdentityInitializer";
 import "./globals.css";
 import { FooterLayout } from "@/components/FooterLayout";
@@ -82,6 +83,7 @@ export default async function RootLayout({
 
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ClientIdentityInitializer />
+          <InstallAppPrompt showManualButton={false} />
 
           <FooterLayout>{children}</FooterLayout>
 

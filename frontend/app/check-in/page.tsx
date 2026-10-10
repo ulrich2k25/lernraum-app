@@ -258,7 +258,7 @@ export default function DirectCheckInPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F4F8FA] pb-8 text-[#102A43]">
+    <main className="flex-none bg-[#F4F8FA] pb-8 text-[#102A43] md:flex-1">
       <div className="mx-auto w-full max-w-2xl px-4 py-6 sm:px-6 md:px-8 lg:py-12">
         <section className="overflow-hidden rounded-[26px] border border-[#D9E7EC] bg-white shadow-[0_12px_40px_rgba(15,42,67,0.08)] sm:rounded-[30px]">
           <div className="bg-gradient-to-br from-[#063B5C] via-[#075985] to-[#0F8B8D] px-5 py-6 text-white sm:px-8 sm:py-8">

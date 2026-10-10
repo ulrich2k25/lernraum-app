@@ -167,7 +167,7 @@ export default function BesuchePage() {
   }, [t]);
 
   return (
-    <main className="w-full flex-1 bg-[#F4F8FA] pb-24 text-[#102A43]">
+    <main className="w-full flex-none bg-[#F4F8FA] pb-8 text-[#102A43] md:flex-1 md:pb-24">
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 md:px-8 lg:py-10">
         {/* Navigation */}
         <Link

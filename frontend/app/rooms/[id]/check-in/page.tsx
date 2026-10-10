@@ -16,7 +16,7 @@ export default async function CheckInPage({ params }: CheckInPageProps) {
   const room: Room = await response.json();
 
   return (
-    <main className="min-h-screen bg-[#F4F8FA] pb-8 text-[#102A43]">
+    <main className="flex-none bg-[#F4F8FA] pb-8 text-[#102A43] md:flex-1">
       <div className="mx-auto w-full max-w-3xl px-4 py-5 sm:px-6 md:px-8 lg:py-10">
         <Link href={`/rooms/${room.id}`} className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-[#075985] transition hover:opacity-70 sm:mb-6"><span aria-hidden="true">←</span>{t("back")}</Link>
         <CheckInPanel room={room} />

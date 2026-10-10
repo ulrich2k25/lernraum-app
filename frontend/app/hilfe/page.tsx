@@ -30,7 +30,7 @@ export default function HelpPage() {
   const t = useTranslations("help");
 
   return (
-    <main className="mx-auto w-full max-w-6xl flex-1 px-4 pb-12 pt-6 text-[#102A43] sm:px-6 md:px-8 md:pt-8">
+    <main className="mx-auto w-full max-w-6xl flex-none px-4 pb-8 pt-6 text-[#102A43] sm:px-6 md:flex-1 md:px-8 md:pb-12 md:pt-8">
       <section className="rounded-[26px] bg-gradient-to-br from-[#102A43] via-[#164765] to-[#087F83] px-6 py-8 text-white sm:px-9 sm:py-10">
         <span className="inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-[#B7F4EB]">
           Lernraum

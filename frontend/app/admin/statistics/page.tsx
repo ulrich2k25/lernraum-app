@@ -206,7 +206,7 @@ export default function AdminStatisticsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#F4F8FA] text-[#102A43]">
+    <main className="flex-none bg-[#F4F8FA] text-[#102A43] md:flex-1">
       <div className="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6 md:px-8">
         {/* HEADER */}
         <header className="rounded-[26px] bg-gradient-to-br from-[#102A43] via-[#164765] to-[#087F83] px-6 py-7 text-white sm:px-8">

@@ -95,7 +95,7 @@ export default async function DatenschutzPage() {
   const t = content[locale as keyof typeof content] ?? content.de;
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8 pb-24 sm:px-6">
+    <main className="mx-auto w-full max-w-4xl flex-none px-4 py-8 pb-8 sm:px-6 md:flex-1 md:pb-24">
       <Link
         href="/"
         className="text-sm font-semibold text-[#087F83] hover:underline"

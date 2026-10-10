@@ -33,7 +33,7 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
   const hasGroups = (room.aktiveGruppen ?? 0) > 0;
 
   return (
-    <main className="min-h-screen bg-[#F4F8FA] pb-8 text-[#102A43]">
+    <main className="flex-none bg-[#F4F8FA] pb-8 text-[#102A43] md:flex-1">
       <RoomDetailAutoRefresh />
       <div className="mx-auto w-full max-w-4xl px-4 py-5 sm:px-6 md:px-8 lg:py-10">
         <Link

@@ -25,6 +25,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("metadata");
 
   return {
+    metadataBase: new URL("https://lernraum-app-dun.vercel.app"),
+
     title: {
       default: "Lernraum",
       template: "%s | Lernraum",

@@ -15,6 +15,32 @@ export default async function CheckInPage({ params }: CheckInPageProps) {
   if (!response.ok) throw new Error(t("loadError"));
   const room: Room = await response.json();
 
+  if (room.isUnderRenovation) {
+    return (
+      <main className="flex-none bg-[#F4F8FA] pb-8 text-[#102A43] md:flex-1">
+        <div className="mx-auto w-full max-w-3xl px-4 py-5 sm:px-6 md:px-8 lg:py-10">
+          <Link
+            href={`/rooms/${room.id}`}
+            className="mb-6 inline-flex text-sm font-semibold text-[#075985]"
+          >
+            {t("renovationBack")}
+          </Link>
+
+          <div role="status" className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-amber-900">
+            <h1 className="text-xl font-bold">
+              <span aria-hidden="true">&#128679;</span>{" "}
+              {t("renovationTitle")}
+            </h1>
+
+            <p className="mt-3 text-sm leading-6 text-amber-800">
+              {t("renovationClosed")}
+            </p>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="flex-none bg-[#F4F8FA] pb-8 text-[#102A43] md:flex-1">
       <div className="mx-auto w-full max-w-3xl px-4 py-5 sm:px-6 md:px-8 lg:py-10">

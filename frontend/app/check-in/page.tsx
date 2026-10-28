@@ -89,6 +89,11 @@ export default function DirectCheckInPage() {
           return;
         }
 
+        if (resolvedRoom.isUnderRenovation) {
+          setMessage(t("renovationClosed"));
+          setStatus("error");
+          return;
+        }
         setRoom(resolvedRoom);
         setRoomToken(token);
 

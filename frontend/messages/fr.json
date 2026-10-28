@@ -49,6 +49,8 @@
     "emptyText": "Aucune salle d'étude n'est actuellement disponible."
   },
   "roomCard": {
+    "renovationBadge": "En travaux",
+    "renovationMessage": "Cette salle est temporairement fermée pour travaux. Les enregistrements sont actuellement indisponibles.",
     "active": "Actif",
     "temporarilyClosed": "Cette salle est actuellement fermée",
     "statusInfo": "Information sur le statut de la salle",
@@ -64,6 +66,8 @@
     "groupPresence": "{groups, plural, one {# groupe} other {# groupes}} · {people, plural, one {# personne} other {# personnes}}"
   },
   "roomDetail": {
+    "renovationMessage": "Cette salle est temporairement fermée pour travaux. Les enregistrements sont actuellement indisponibles.",
+    "renovationTitle": "En travaux",
     "loadError": "La salle d'étude n'a pas pu être chargée.",
     "back": "Retour aux salles d'étude",
     "active": "Actif",
@@ -87,6 +91,9 @@
     "groupsInRoom": "Groupes dans la salle"
   },
   "checkInPage": {
+    "renovationBack": "Retour à la salle",
+    "renovationClosed": "Cette salle est temporairement fermée pour travaux. Les enregistrements sont actuellement indisponibles.",
+    "renovationTitle": "En travaux",
     "loadError": "La salle d'étude n'a pas pu être chargée.",
     "back": "Retour à la salle"
   },
@@ -127,6 +134,7 @@
     "groupSuccessRoom": "Check-in de groupe réussi. {count} personnes sont maintenant enregistrées dans la salle {room}."
   },
   "directCheckIn": {
+    "renovationClosed": "Cette salle est temporairement fermée pour travaux. Les enregistrements sont actuellement indisponibles.",
     "label": "Check-in QR direct",
     "fallbackRoom": "Salle d'étude",
     "recognizingTitle": "Identification de la salle …",
@@ -287,6 +295,8 @@
     "autoCloseCreate": "Fermer automatiquement la salle lorsqu'elle est vide",
     "autoCloseCreateHint": "Cette option pourra encore être modifiée plus tard.",
     "autoCloseEdit": "Afficher automatiquement comme fermée lorsque personne n'est enregistré",
+    "renovationEdit": "Fermer la salle pour travaux",
+    "renovationEditHint": "La salle reste visible, mais les check-ins par QR code ou NFC sont impossibles pendant les travaux.",
     "autoCloseEditHint": "L'indication est retirée automatiquement lors du premier check-in.",
     "creating": "Création de la salle ...",
     "create": "Créer la salle",

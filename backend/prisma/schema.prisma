@@ -17,6 +17,7 @@ model Lernraum {
   raumToken           String     @unique
   autoCloseWhenEmpty  Boolean    @default(false)
   isTemporarilyClosed Boolean    @default(false)
+  isUnderRenovation   Boolean    @default(false)
 
   sessions Session[]
 }

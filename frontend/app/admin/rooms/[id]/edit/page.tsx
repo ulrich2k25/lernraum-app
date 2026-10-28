@@ -19,6 +19,7 @@ type AdminRoom = {
   raumToken: string;
   autoCloseWhenEmpty: boolean;
   isTemporarilyClosed: boolean;
+  isUnderRenovation: boolean;
   aktiveSitzungen: number;
   freiePlaetze: number;
 };
@@ -40,6 +41,7 @@ export default function EditAdminRoomPage() {
   const [kapazitaet, setKapazitaet] = useState("");
   const [status, setStatus] = useState<"ACTIVE" | "INACTIVE">("ACTIVE");
   const [autoCloseWhenEmpty, setAutoCloseWhenEmpty] = useState(false);
+  const [isUnderRenovation, setIsUnderRenovation] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -96,6 +98,7 @@ export default function EditAdminRoomPage() {
         setKapazitaet(String(currentRoom.kapazitaet));
         setStatus(currentRoom.status);
         setAutoCloseWhenEmpty(currentRoom.autoCloseWhenEmpty);
+        setIsUnderRenovation(currentRoom.isUnderRenovation);
       } catch (error) {
         if (isMounted) {
           setError(error instanceof Error ? error.message : t("loadError"));
@@ -155,6 +158,7 @@ export default function EditAdminRoomPage() {
           etage: etage.trim(),
           kapazitaet: parsedCapacity,
           autoCloseWhenEmpty,
+          isUnderRenovation,
         }),
       });
 
@@ -425,6 +429,26 @@ export default function EditAdminRoomPage() {
                 </span>
               </label>
 
+              {/* RENOVATION */}
+              <label className="flex cursor-pointer items-start gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 transition hover:border-amber-300 sm:p-5">
+                <input
+                  type="checkbox"
+                  checked={isUnderRenovation}
+                  onChange={(e) => setIsUnderRenovation(e.target.checked)}
+                  disabled={isSaving}
+                  className="mt-1 h-4 w-4 shrink-0 accent-amber-600"
+                />
+
+                <span>
+                  <span className="block text-sm font-bold text-[#102A43]">
+                    {t("renovationEdit")}
+                  </span>
+
+                  <span className="mt-1 block text-xs leading-5 text-[#71869A]">
+                    {t("renovationEditHint")}
+                  </span>
+                </span>
+              </label>
               {/* ERROR */}
               {error && (
                 <div

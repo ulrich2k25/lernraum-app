@@ -31,4 +31,8 @@ export class UpdateRoomDto {
   @IsOptional()
   @IsBoolean()
   autoCloseWhenEmpty?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isUnderRenovation?: boolean;
 }

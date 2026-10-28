@@ -230,6 +230,12 @@ export class SessionsService {
         );
       }
 
+      if (room.isUnderRenovation) {
+        throw new BadRequestException(
+          'Dieser Lernraum ist wegen Renovierungsarbeiten voruebergehend geschlossen.',
+        );
+      }
+
       const existingSession = await tx.session.findFirst({
         where: {
           clientId,

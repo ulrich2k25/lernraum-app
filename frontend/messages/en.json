@@ -49,6 +49,8 @@
     "emptyText": "There are currently no study rooms available."
   },
   "roomCard": {
+    "renovationBadge": "Under renovation",
+    "renovationMessage": "This study room is temporarily closed for renovation. Check-ins are currently unavailable.",
     "active": "Active",
     "temporarilyClosed": "This room is currently closed",
     "statusInfo": "Room status information",
@@ -64,6 +66,8 @@
     "groupPresence": "{groups, plural, one {# group} other {# groups}} · {people, plural, one {# person} other {# people}}"
   },
   "roomDetail": {
+    "renovationMessage": "This study room is temporarily closed for renovation. Check-ins are currently unavailable.",
+    "renovationTitle": "Under renovation",
     "loadError": "The study room could not be loaded.",
     "back": "Back to study rooms",
     "active": "Active",
@@ -87,6 +91,9 @@
     "groupsInRoom": "Groups in the room"
   },
   "checkInPage": {
+    "renovationBack": "Back to study room",
+    "renovationClosed": "This study room is temporarily closed for renovation. Check-ins are currently unavailable.",
+    "renovationTitle": "Under renovation",
     "loadError": "The study room could not be loaded.",
     "back": "Back to the study room"
   },
@@ -127,6 +134,7 @@
     "groupSuccessRoom": "Group check-in successful. {count} people are now checked into room {room}."
   },
   "directCheckIn": {
+    "renovationClosed": "This study room is temporarily closed for renovation. Check-ins are currently unavailable.",
     "label": "Direct QR check-in",
     "fallbackRoom": "Study room",
     "recognizingTitle": "Identifying study room …",
@@ -287,6 +295,8 @@
     "autoCloseCreate": "Automatically close room when empty",
     "autoCloseCreateHint": "This option can still be changed later.",
     "autoCloseEdit": "Show as closed automatically when nobody is checked in",
+    "renovationEdit": "Close room for renovation",
+    "renovationEditHint": "The room remains visible, but check-ins via QR code or NFC are not possible during renovation.",
     "autoCloseEditHint": "The label is removed automatically with the first check-in.",
     "creating": "Creating study room ...",
     "create": "Create study room",

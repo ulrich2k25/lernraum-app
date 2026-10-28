@@ -25,10 +25,17 @@ export default function RoomCard({ room }: RoomCardProps) {
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         {/* Status */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-2 rounded-full bg-[#EAF8F4] px-3 py-1.5 text-[11px] font-bold text-[#087F73]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#0FAD91]" />
-            {t("active")}
-          </span>
+          {room.isUnderRenovation ? (
+            <span className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1.5 text-[11px] font-bold text-amber-900">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+              {t("renovationBadge")}
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#EAF8F4] px-3 py-1.5 text-[11px] font-bold text-[#087F73]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#0FAD91]" />
+              {t("active")}
+            </span>
+          )}
 
           {(room.aktiveGruppen ?? 0) > 0 && (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EEF3FF] px-3 py-1.5 text-[11px] font-semibold text-[#3157A4]">
@@ -66,8 +73,30 @@ export default function RoomCard({ room }: RoomCardProps) {
           </Link>
         </div>
 
+        {/* Renovation notice */}
+        {room.isUnderRenovation && (
+          <div
+            role="status"
+            className="mt-4 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900"
+          >
+            <span aria-hidden="true" className="text-xl">
+              &#128679;
+            </span>
+
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-bold">
+                {t("renovationBadge")}
+              </p>
+
+              <p className="mt-1 text-xs leading-5 text-amber-800">
+                {t("renovationMessage")}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Temporary closure */}
-        {room.isTemporarilyClosed && (
+        {!room.isUnderRenovation && room.isTemporarilyClosed && (
           <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 text-xs font-semibold text-amber-800">
             <span className="mt-0.5 text-amber-600" aria-hidden="true">
               ●

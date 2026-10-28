@@ -22,6 +22,7 @@ type UpdateRoomData = {
   etage?: string;
   kapazitaet?: number;
   autoCloseWhenEmpty?: boolean;
+  isUnderRenovation?: boolean;
 };
 
 @Injectable()
@@ -82,6 +83,7 @@ export class RoomsService {
         kapazitaet: true,
         status: true,
         isTemporarilyClosed: true,
+        isUnderRenovation: true,
       },
       orderBy: {
         raumBezeichnung: 'asc',
@@ -94,10 +96,9 @@ export class RoomsService {
       rooms.map(async (room) => {
         const occupancy = await this.getRoomOccupancy(room.id, now);
 
-        const freiePlaetze = Math.max(
-          room.kapazitaet - occupancy.belegtePlaetze,
-          0,
-        );
+        const freiePlaetze = room.isUnderRenovation
+          ? 0
+          : Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0);
 
         return {
           ...room,
@@ -109,7 +110,9 @@ export class RoomsService {
       }),
     );
 
-    return roomsWithAvailability.filter((room) => room.freiePlaetze > 0);
+    return roomsWithAvailability.filter(
+      (room) => room.isUnderRenovation || room.freiePlaetze > 0,
+    );
   }
 
   async findOne(id: number) {
@@ -126,6 +129,7 @@ export class RoomsService {
         kapazitaet: true,
         status: true,
         isTemporarilyClosed: true,
+        isUnderRenovation: true,
       },
     });
 
@@ -139,7 +143,7 @@ export class RoomsService {
 
     return {
       ...room,
-      freiePlaetze: Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0),
+      freiePlaetze: room.isUnderRenovation ? 0 : Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0),
       aktiveSitzungen: occupancy.aktiveSitzungen,
       aktiveGruppen: occupancy.aktiveGruppen,
       personenInGruppen: occupancy.personenInGruppen,
@@ -166,6 +170,7 @@ export class RoomsService {
         kapazitaet: true,
         status: true,
         isTemporarilyClosed: true,
+        isUnderRenovation: true,
       },
     });
 
@@ -177,7 +182,7 @@ export class RoomsService {
 
     return {
       ...room,
-      freiePlaetze: Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0),
+      freiePlaetze: room.isUnderRenovation ? 0 : Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0),
       aktiveSitzungen: occupancy.aktiveSitzungen,
       aktiveGruppen: occupancy.aktiveGruppen,
       personenInGruppen: occupancy.personenInGruppen,
@@ -196,6 +201,7 @@ export class RoomsService {
         raumToken: true,
         autoCloseWhenEmpty: true,
         isTemporarilyClosed: true,
+        isUnderRenovation: true,
       },
       orderBy: {
         raumBezeichnung: 'asc',
@@ -214,7 +220,7 @@ export class RoomsService {
           belegtePlaetze: occupancy.belegtePlaetze,
           aktiveGruppen: occupancy.aktiveGruppen,
           personenInGruppen: occupancy.personenInGruppen,
-          freiePlaetze: Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0),
+          freiePlaetze: room.isUnderRenovation ? 0 : Math.max(room.kapazitaet - occupancy.belegtePlaetze, 0),
         };
       }),
     );
@@ -273,6 +279,7 @@ export class RoomsService {
         raumToken: true,
         autoCloseWhenEmpty: true,
         isTemporarilyClosed: true,
+        isUnderRenovation: true,
       },
     });
   }
@@ -354,6 +361,7 @@ export class RoomsService {
         kapazitaet,
         autoCloseWhenEmpty,
         isTemporarilyClosed,
+        isUnderRenovation: data.isUnderRenovation ?? room.isUnderRenovation,
       },
       select: {
         id: true,
@@ -365,6 +373,7 @@ export class RoomsService {
         raumToken: true,
         autoCloseWhenEmpty: true,
         isTemporarilyClosed: true,
+        isUnderRenovation: true,
       },
     });
   }
@@ -403,6 +412,7 @@ export class RoomsService {
         raumToken: true,
         autoCloseWhenEmpty: true,
         isTemporarilyClosed: true,
+        isUnderRenovation: true,
       },
     });
   }

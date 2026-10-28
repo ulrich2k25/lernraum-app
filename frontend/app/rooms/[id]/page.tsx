@@ -30,12 +30,24 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
   const room: Room = await response.json();
 
   const isActive = room.status === "ACTIVE";
+  const canCheckIn = isActive && !room.isUnderRenovation;
   const hasGroups = (room.aktiveGruppen ?? 0) > 0;
 
   return (
     <main className="flex-none bg-[#F4F8FA] pb-8 text-[#102A43] md:flex-1">
       <RoomDetailAutoRefresh />
       <div className="mx-auto w-full max-w-4xl px-4 py-5 sm:px-6 md:px-8 lg:py-10">
+        {room.isUnderRenovation && (
+          <div role="status" className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-900">
+            <p className="text-base font-bold">
+              <span aria-hidden="true">&#128679;</span>{" "}
+              {t("renovationTitle")}
+            </p>
+            <p className="mt-2 text-sm leading-6 text-amber-800">
+              {t("renovationMessage")}
+            </p>
+          </div>
+        )}
         <Link
           href="/"
           className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-[#075985] transition hover:opacity-70 sm:mb-6"
@@ -57,7 +69,7 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
                     }`}
                   />
 
-                  {isActive ? t("active") : t("unavailable")}
+                  {room.isUnderRenovation ? t("renovationTitle") : isActive ? t("active") : t("unavailable")}
                 </div>
 
                 {hasGroups && (
@@ -191,19 +203,21 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
 
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-bold ${
-                      isActive
-                        ? "bg-[#E9FAF7] text-[#087F73]"
-                        : "bg-slate-100 text-slate-500"
+                      room.isUnderRenovation
+                        ? "bg-amber-100 text-amber-800"
+                        : isActive
+                          ? "bg-[#E9FAF7] text-[#087F73]"
+                          : "bg-slate-100 text-slate-500"
                     }`}
                   >
-                    {isActive ? t("active") : t("unavailable")}
+                    {room.isUnderRenovation ? t("renovationTitle") : isActive ? t("active") : t("unavailable")}
                   </span>
                 </div>
               </div>
             </div>
 
             <div className="mt-6 border-t border-slate-100 pt-6 sm:mt-8 sm:pt-7">
-              {isActive ? (
+              {canCheckIn ? (
                 <Link
                   href={`/rooms/${room.id}/check-in`}
                   className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#075985] px-6 py-3.5 text-base font-bold text-white shadow-sm transition hover:bg-[#064B70] sm:py-4 sm:text-lg"

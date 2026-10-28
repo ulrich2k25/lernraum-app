@@ -49,6 +49,8 @@
     "emptyText": "Aktuell stehen keine Lernräume zur Verfügung."
   },
   "roomCard": {
+    "renovationBadge": "In Renovierung",
+    "renovationMessage": "Dieser Lernraum ist wegen Renovierungsarbeiten vorübergehend geschlossen. Check-ins sind derzeit nicht möglich.",
     "active": "Aktiv",
     "temporarilyClosed": "Der Raum ist derzeit geschlossen",
     "statusInfo": "Information zum Raumstatus",
@@ -64,6 +66,8 @@
     "groupPresence": "{groups, plural, one {# Gruppe} other {# Gruppen}} · {people, plural, one {# Person} other {# Personen}}"
   },
   "roomDetail": {
+    "renovationMessage": "Dieser Lernraum ist wegen Renovierungsarbeiten vorübergehend geschlossen. Check-ins sind derzeit nicht möglich.",
+    "renovationTitle": "In Renovierung",
     "loadError": "Der Lernraum konnte nicht geladen werden.",
     "back": "Zurück zu den Lernräumen",
     "active": "Aktiv",
@@ -87,6 +91,9 @@
     "groupsInRoom": "Gruppen im Raum"
   },
   "checkInPage": {
+    "renovationBack": "Zurück zum Lernraum",
+    "renovationClosed": "Dieser Lernraum ist wegen Renovierungsarbeiten vorübergehend geschlossen. Check-ins sind derzeit nicht möglich.",
+    "renovationTitle": "In Renovierung",
     "loadError": "Der Lernraum konnte nicht geladen werden.",
     "back": "Zurück zum Lernraum"
   },
@@ -127,6 +134,7 @@
     "groupSuccessRoom": "Gruppen-Check-in erfolgreich. {count} Personen sind jetzt in Raum {room} eingecheckt."
   },
   "directCheckIn": {
+    "renovationClosed": "Dieser Lernraum ist wegen Renovierungsarbeiten vorübergehend geschlossen. Check-ins sind derzeit nicht möglich.",
     "label": "Direkter QR-Check-in",
     "fallbackRoom": "Lernraum",
     "recognizingTitle": "Lernraum wird erkannt …",
@@ -287,6 +295,8 @@
     "autoCloseCreate": "Raum automatisch schließen, wenn er leer ist",
     "autoCloseCreateHint": "Diese Option kann später weiterhin angepasst werden.",
     "autoCloseEdit": "Automatisch als geschlossen anzeigen, wenn niemand eingecheckt ist",
+    "renovationEdit": "Raum wegen Renovierungsarbeiten schließen",
+    "renovationEditHint": "Der Lernraum bleibt sichtbar, aber Check-ins über QR-Code und NFC sind während der Renovierung nicht möglich.",
     "autoCloseEditHint": "Beim ersten Check-in wird die Kennzeichnung automatisch entfernt.",
     "creating": "Lernraum wird erstellt ...",
     "create": "Lernraum erstellen",

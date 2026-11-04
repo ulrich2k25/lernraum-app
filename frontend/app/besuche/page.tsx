@@ -167,47 +167,25 @@ export default function BesuchePage() {
   }, [t]);
 
   return (
-    <main className="w-full flex-none bg-[#F4F8FA] pb-8 text-[#102A43] md:flex-1 md:pb-24">
+    <main data-lernraum-visits className="w-full flex-none bg-[#F6F8FA] pb-8 text-[#183247] md:flex-1 md:pb-8">
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 md:px-8 lg:py-10">
         {/* Navigation */}
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-[#075985] transition hover:text-[#087F83]"
+          className="mb-6 inline-flex min-h-11 items-center justify-center rounded-lg border border-[#C7D9E1] bg-white px-4 py-2.5 text-sm font-semibold text-[#17536B] transition-colors hover:bg-[#EEF5F7]"
         >
-          <span aria-hidden="true">←</span>
+
           {t("back")}
         </Link>
 
         {/* En-tête */}
-        <header className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[#102A43] via-[#075985] to-[#087F83] px-6 py-8 text-white shadow-[0_16px_45px_rgba(16,42,67,0.13)] sm:px-9 sm:py-10">
-          <div
-            className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full border border-white/10"
-            aria-hidden="true"
-          />
-          <div
-            className="pointer-events-none absolute -right-8 -top-12 h-48 w-48 rounded-full border border-white/10"
-            aria-hidden="true"
-          />
-
-          <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px] border border-white/15 bg-white/10 text-[#A5F3E7]">
-              <HistoryIcon className="h-8 w-8" />
-            </div>
-
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#A5F3E7]">
-                {t("eyebrow")}
-              </p>
-
-              <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">
-                {t("title")}
-              </h1>
-
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-[#DCECF2] sm:text-base">
-                {t("description")}
-              </p>
-            </div>
-          </div>
+        <header className="mb-6">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#153C52] sm:text-4xl">
+            {t("title")}
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-[#647D8D] sm:text-base">
+            {t("description")}
+          </p>
         </header>
 
         {/* Historique */}
@@ -232,9 +210,9 @@ export default function BesuchePage() {
           )}
 
           {!isLoading && !error && visits.length === 0 && (
-            <div className="relative overflow-hidden rounded-[26px] border border-[#D9E7EC] bg-white px-6 py-12 text-center shadow-[0_8px_30px_rgba(16,42,67,0.035)] sm:py-16">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-[24px] bg-[#EAF7F7] text-[#087F83]">
-                <HistoryIcon className="h-10 w-10" />
+            <div className="rounded-xl border border-[#DCE5EA] bg-white px-5 py-9 text-center sm:px-8 sm:py-11">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-[#EDF5F7] text-[#17536B]">
+                <HistoryIcon className="h-6 w-6" />
               </div>
 
               <h2 className="mt-6 text-xl font-extrabold text-[#102A43] sm:text-2xl">
@@ -245,7 +223,7 @@ export default function BesuchePage() {
                 {t("emptyText")}
               </p>
 
-              <div className="mx-auto mt-7 h-1 w-12 rounded-full bg-[#0F8B8D]/25" />
+
             </div>
           )}
 
@@ -257,7 +235,7 @@ export default function BesuchePage() {
                 return (
                   <article
                     key={visit.id}
-                    className="group overflow-hidden rounded-[24px] border border-[#D9E7EC] bg-white shadow-[0_6px_24px_rgba(16,42,67,0.035)] transition hover:border-[#B8D9DE] hover:shadow-[0_12px_35px_rgba(16,42,67,0.07)]"
+                    className="group overflow-hidden rounded-xl border border-[#DCE5EA] bg-white transition-colors hover:border-[#A2BCC8]"
                   >
                     <div className="p-5 sm:p-6">
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

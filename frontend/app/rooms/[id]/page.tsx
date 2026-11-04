@@ -34,11 +34,11 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
   const hasGroups = (room.aktiveGruppen ?? 0) > 0;
 
   return (
-    <main className="flex-none bg-[#F4F8FA] pb-8 text-[#102A43] md:flex-1">
+    <main data-lernraum-room-detail className="flex-none bg-[#F6F8FA] pb-8 text-[#183247] md:flex-1">
       <RoomDetailAutoRefresh />
-      <div className="mx-auto w-full max-w-4xl px-4 py-5 sm:px-6 md:px-8 lg:py-10">
+      <div className="mx-auto w-full max-w-4xl px-4 py-6 sm:px-6 md:px-8 lg:py-9">
         {room.isUnderRenovation && (
-          <div role="status" className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-900">
+          <div role="status" className="mb-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-900 sm:p-5">
             <p className="text-base font-bold">
               <span aria-hidden="true">&#128679;</span>{" "}
               {t("renovationTitle")}
@@ -50,22 +50,33 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
         )}
         <Link
           href="/"
-          className="mb-5 inline-flex items-center gap-2 text-sm font-semibold text-[#075985] transition hover:opacity-70 sm:mb-6"
+          className="mb-5 inline-flex min-h-11 items-center justify-center rounded-lg border border-[#C7D9E1] bg-white px-4 py-2.5 text-sm font-semibold text-[#17536B] transition-colors hover:border-[#8FB2C1] hover:bg-[#EEF5F7] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B7791] sm:mb-6"
         >
-          <span aria-hidden="true">←</span>
           {t("back")}
         </Link>
 
-        <section className="overflow-hidden rounded-[26px] border border-[#D9E7EC] bg-white shadow-[0_12px_40px_rgba(15,42,67,0.08)] sm:rounded-[30px]">
-          <div className="relative overflow-hidden bg-gradient-to-br from-[#063B5C] via-[#075985] to-[#0F8B8D] px-5 py-6 text-white sm:p-8">
-            <div className="absolute -right-14 -top-16 h-40 w-40 rounded-full border-[24px] border-white/5 sm:h-44 sm:w-44 sm:border-[26px]" />
+        <section className="overflow-hidden rounded-xl border border-[#DCE5EA] bg-white">
+          <div className="border-b border-[#E8EDF0] bg-white px-5 py-6 text-[#153C52] sm:px-7 sm:py-7">
+
 
             <div className="relative">
               <div className="mb-3 flex flex-wrap items-center gap-2 sm:mb-4">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold backdrop-blur">
+                <div
+                  className={`inline-flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs font-semibold ${
+                    room.isUnderRenovation
+                      ? "border-amber-200 bg-amber-50 text-amber-800"
+                      : isActive
+                        ? "border-[#CDE8DC] bg-[#F0F8F4] text-[#176346]"
+                        : "border-[#DCE5EA] bg-[#F3F5F6] text-[#596C79]"
+                  }`}
+                >
                   <span
                     className={`h-2 w-2 rounded-full ${
-                      isActive ? "bg-[#5EEAD4]" : "bg-slate-300"
+                      room.isUnderRenovation
+                        ? "bg-amber-500"
+                        : isActive
+                          ? "bg-emerald-500"
+                          : "bg-slate-400"
                     }`}
                   />
 
@@ -73,7 +84,7 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
                 </div>
 
                 {hasGroups && (
-                  <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-blue-50 backdrop-blur">
+                  <div className="inline-flex items-center gap-2 rounded-md border border-[#D8E5F0] bg-[#F0F5FA] px-2.5 py-1.5 text-xs font-medium text-[#315779]">
                     <span aria-hidden="true">👥</span>
 
                     <span>
@@ -86,15 +97,15 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
                 )}
               </div>
 
-              <p className="text-sm font-medium text-blue-100">
+              <p className="text-xs font-semibold text-[#698090]">
                 {t("roomLabel")}
               </p>
 
-              <h1 className="mt-1 text-4xl font-bold tracking-tight sm:text-5xl">
+              <h1 className="mt-1 text-3xl font-bold tracking-tight text-[#153C52] sm:text-4xl">
                 {room.raumBezeichnung}
               </h1>
 
-              <p className="mt-2 text-sm text-blue-50/80 sm:mt-3 sm:text-base">
+              <p className="mt-1.5 text-sm text-[#647D8D] sm:text-base">
                 {room.gebaeude} · {room.etage}
               </p>
             </div>
@@ -102,8 +113,8 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
 
           <div className="p-5 sm:p-8">
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
-              <div className="rounded-2xl border border-[#BFE8E4] bg-gradient-to-br from-[#F0FCFA] to-[#E8F7FA] p-4 sm:p-5">
-                <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#087F73]">
+              <div className="rounded-lg border border-[#CFE4DE] bg-[#F2F8F6] p-4 sm:p-5">
+                <p className="text-xs font-semibold text-[#286C61]">
                   {t("freeSeats")}
                 </p>
 
@@ -117,13 +128,13 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
                   </span>
                 </div>
 
-                <p className="mt-2 hidden text-xs leading-5 text-slate-400 sm:block">
+                <p className="mt-2 hidden text-xs leading-5 text-[#667E8D] sm:block">
                   {t("occupancyHint")}
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-[#FAFCFD] p-4 sm:p-5">
-                <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-400">
+              <div className="rounded-lg border border-[#E0E7EB] bg-[#F7F9FA] p-4 sm:p-5">
+                <p className="text-xs font-semibold text-[#647D8D]">
                   {t("capacity")}
                 </p>
 
@@ -137,14 +148,14 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
                   </span>
                 </div>
 
-                <p className="mt-2 hidden text-xs leading-5 text-slate-400 sm:block">
+                <p className="mt-2 hidden text-xs leading-5 text-[#667E8D] sm:block">
                   {t("capacityHint")}
                 </p>
               </div>
             </div>
 
             {hasGroups && (
-              <div className="mt-5 rounded-2xl border border-[#D5E1FF] bg-[#F7F9FF] p-4 sm:p-5">
+              <div className="mt-5 rounded-lg border border-[#D8E5F0] bg-[#F3F7FB] p-4 sm:p-5">
                 <div className="flex items-start gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EEF4FF] text-lg">
                     👥
@@ -166,79 +177,29 @@ export default async function RoomDetailPage({ params }: RoomDetailPageProps) {
               </div>
             )}
 
-            <div className="mt-6 sm:mt-7">
-              <p className="text-xs font-bold uppercase tracking-[0.14em] text-[#0F8B8D]">
-                {t("details")}
-              </p>
-
-              <div className="mt-3 divide-y divide-slate-100 rounded-2xl border border-slate-200 bg-white">
-                <div className="flex items-center justify-between gap-4 px-4 py-3.5 sm:px-5 sm:py-4">
-                  <span className="text-sm text-slate-500">{t("room")}</span>
-
-                  <span className="text-sm font-bold text-[#102A43]">
-                    {room.raumBezeichnung}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between gap-4 px-4 py-3.5 sm:px-5 sm:py-4">
-                  <span className="text-sm text-slate-500">
-                    {t("building")}
-                  </span>
-
-                  <span className="text-sm font-bold text-[#102A43]">
-                    {room.gebaeude}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between gap-4 px-4 py-3.5 sm:px-5 sm:py-4">
-                  <span className="text-sm text-slate-500">{t("floor")}</span>
-
-                  <span className="text-sm font-bold text-[#102A43]">
-                    {room.etage}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between gap-4 px-4 py-3.5 sm:px-5 sm:py-4">
-                  <span className="text-sm text-slate-500">{t("status")}</span>
-
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-bold ${
-                      room.isUnderRenovation
-                        ? "bg-amber-100 text-amber-800"
-                        : isActive
-                          ? "bg-[#E9FAF7] text-[#087F73]"
-                          : "bg-slate-100 text-slate-500"
-                    }`}
-                  >
-                    {room.isUnderRenovation ? t("renovationTitle") : isActive ? t("active") : t("unavailable")}
-                  </span>
-                </div>
-              </div>
-            </div>
-
             <div className="mt-6 border-t border-slate-100 pt-6 sm:mt-8 sm:pt-7">
               {canCheckIn ? (
                 <Link
                   href={`/rooms/${room.id}/check-in`}
-                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#075985] px-6 py-3.5 text-base font-bold text-white shadow-sm transition hover:bg-[#064B70] sm:py-4 sm:text-lg"
+                  className="flex w-full items-center justify-center rounded-lg bg-[#17536B] px-6 py-3.5 text-base font-semibold text-white transition-colors hover:bg-[#103E52] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B7791] focus-visible:ring-offset-2 sm:py-4"
                 >
                   {t("checkIn")}
-                  <span aria-hidden="true">→</span>
                 </Link>
               ) : (
                 <button
                   type="button"
                   disabled
-                  className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-2xl bg-slate-300 px-6 py-3.5 text-base font-bold text-white sm:py-4 sm:text-lg"
+                  className="flex w-full cursor-not-allowed items-center justify-center rounded-lg bg-[#CBD5DB] px-6 py-3.5 text-base font-semibold text-[#5C6F7B] sm:py-4"
                 >
                   {t("checkIn")}
-                  <span aria-hidden="true">→</span>
                 </button>
               )}
 
-              <p className="mt-3 text-center text-xs text-slate-400">
-                {t("checkInHint")}
-              </p>
+              {canCheckIn && (
+                <p className="mt-3 text-center text-xs text-slate-400">
+                  {t("checkInHint")}
+                </p>
+              )}
             </div>
           </div>
         </section>

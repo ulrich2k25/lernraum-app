@@ -28,3 +28,107 @@ body {
   background: #c5f1e8;
   color: #102a43;
 }
+
+/* Room detail: footer positioning only */
+body:has(main[data-lernraum-room-detail])
+  > div:has(> main[data-lernraum-room-detail]) {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 767px) {
+  body:has(main[data-lernraum-room-detail])
+    > div:has(> footer) {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Check-in pages: same footer positioning as room details */
+
+body:has(main[data-lernraum-check-in])
+  > div:has(> main[data-lernraum-check-in]) {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 767px) {
+  body:has(main[data-lernraum-check-in])
+    > div:has(> footer) {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Besuche: footer positioning */
+body:has(main[data-lernraum-visits])
+  > div:has(> main[data-lernraum-visits]) {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 767px) {
+  body:has(main[data-lernraum-visits])
+    > div:has(> footer) {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Hilfe: footer positioning */
+body:has(main[data-lernraum-help])
+  > div:has(> main[data-lernraum-help]) {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 767px) {
+  body:has(main[data-lernraum-help])
+    > div:has(> footer) {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Lernraum Hilfe: mobile footer fix */
+@media (max-width: 767px) {
+  body:has(main[data-lernraum-help]) {
+    min-height: 100dvh;
+  }
+
+  body:has(main[data-lernraum-help])
+    > div:has(> main[data-lernraum-help]) {
+    flex: 1 1 auto;
+  }
+
+  body:has(main[data-lernraum-help])
+    > div:has(> footer) {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Feedback: page-specific footer positioning */
+body:has(main[data-lernraum-feedback])
+  > div:has(> main[data-lernraum-feedback]) {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 767px) {
+  body:has(main[data-lernraum-feedback]) {
+    min-height: 100dvh;
+  }
+
+  body:has(main[data-lernraum-feedback])
+    > div:has(> footer) {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Datenschutz: page-specific footer positioning */
+body:has(main[data-lernraum-privacy])
+  > div:has(> main[data-lernraum-privacy]) {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 767px) {
+  body:has(main[data-lernraum-privacy]) {
+    min-height: 100dvh;
+  }
+
+  body:has(main[data-lernraum-privacy])
+    > div:has(> footer) {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}

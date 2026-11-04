@@ -290,16 +290,16 @@ export default function ActiveSessionPanel({
   const suffix = t("timeSuffix");
 
   return (
-    <section className="overflow-hidden rounded-[26px] border border-[#D9E7EC] bg-white shadow-[0_12px_40px_rgba(15,42,67,0.08)] sm:rounded-[30px]">
-      <div className="bg-gradient-to-br from-[#063B5C] via-[#075985] to-[#0F8B8D] px-5 py-6 text-white sm:p-8">
+    <section className="overflow-hidden rounded-xl border border-[#DCE5EA] bg-white">
+      <div className="border-b border-[#E8EDF0] bg-white px-5 py-6 text-[#153C52] sm:p-8">
         <div className="flex flex-wrap items-center gap-2">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold backdrop-blur">
-            <span className="h-2 w-2 rounded-full bg-[#5EEAD4]" />
+          <div className="inline-flex items-center gap-2 rounded-md border border-[#CDE8DC] bg-[#F0F8F4] px-3 py-1.5 text-xs font-semibold text-[#176346]">
+            <span className="h-2 w-2 rounded-full bg-[#1A9B76]" />
             {t("active")}
           </div>
 
           {isGroupSession && (
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-blue-50 backdrop-blur">
+            <div className="inline-flex items-center gap-2 rounded-md border border-[#D8E5F0] bg-[#F0F5FA] px-3 py-1.5 text-xs font-semibold text-[#315779]">
               <span aria-hidden="true">👥</span>
 
               <span>
@@ -317,14 +317,14 @@ export default function ActiveSessionPanel({
           })}
         </h1>
 
-        <p className="mt-2 text-sm text-blue-50/80 sm:text-base">
+        <p className="mt-2 text-sm text-[#647D8D] sm:text-base">
           {session.lernraum.gebaeude} · {session.lernraum.etage}
         </p>
       </div>
 
       <div className="p-5 sm:p-8">
         {isGroupSession && (
-          <div className="mb-5 rounded-2xl border border-[#D5E1FF] bg-[#F7F9FF] p-4 sm:p-5">
+          <div className="mb-5 rounded-lg border border-[#D8E5F0] bg-[#F3F7FB] p-4 sm:p-5">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#EEF4FF] text-lg">
                 👥
@@ -345,7 +345,7 @@ export default function ActiveSessionPanel({
           </div>
         )}
 
-        <div className="divide-y divide-slate-100 rounded-2xl border border-slate-200 bg-white">
+        <div className="divide-y divide-[#E8EDF0] overflow-hidden rounded-lg border border-[#E0E7EB] bg-white [&>div:last-child]:bg-[#F0F8F5]">
           <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-5">
             <span className="text-sm text-slate-500">{t("checkIn")}</span>
 
@@ -365,14 +365,14 @@ export default function ActiveSessionPanel({
           <div className="flex items-center justify-between gap-4 px-4 py-4 sm:px-5">
             <span className="text-sm text-slate-500">{t("remaining")}</span>
 
-            <span className="text-sm font-bold text-[#075985]">
+            <span className="text-right text-xl font-bold text-[#17536B] sm:text-2xl">
               {remainingTime}
             </span>
           </div>
         </div>
 
         {!isCheckingNotificationState && !notificationsEnabled && (
-          <div className="mt-5 rounded-2xl border border-[#D9E7EC] bg-[#F7FBFC] p-4">
+          <div className="mt-5 rounded-lg border border-[#DCE5EA] bg-[#F7FAFB] p-4">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E5F5F5] text-lg">
                 🔔
@@ -391,7 +391,7 @@ export default function ActiveSessionPanel({
               type="button"
               onClick={handleEnableNotifications}
               disabled={isEnablingNotifications || isCheckingOut}
-              className="mt-4 flex w-full items-center justify-center rounded-xl border border-[#075985] bg-white px-4 py-3 text-sm font-bold text-[#075985] transition hover:bg-[#EDF7FA] disabled:cursor-not-allowed disabled:opacity-70"
+              className="mt-4 flex min-h-11 w-full items-center justify-center rounded-lg border border-[#C7D9E1] bg-white px-4 py-3 text-sm font-semibold text-[#17536B] transition-colors hover:bg-[#EDF5F7] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isEnablingNotifications
                 ? t("enabling")
@@ -416,7 +416,7 @@ export default function ActiveSessionPanel({
           type="button"
           onClick={handleExtend}
           disabled={isExtending || isCheckingOut}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl border border-[#075985] bg-white px-5 py-3.5 font-bold text-[#075985] transition hover:bg-[#EDF7FA] disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-5 flex w-full items-center justify-center rounded-lg border border-[#8FB2C1] bg-white px-5 py-3.5 font-semibold text-[#17536B] transition-colors hover:bg-[#EDF5F7] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isExtending ? t("extending") : t("extend")}
         </button>
@@ -437,7 +437,7 @@ export default function ActiveSessionPanel({
           type="button"
           onClick={handleCheckOut}
           disabled={isCheckingOut || isExtending}
-          className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#075985] px-5 py-3.5 font-bold text-white transition hover:bg-[#064B70] disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-3 flex w-full items-center justify-center rounded-lg bg-[#17536B] px-5 py-3.5 font-semibold text-white transition-colors hover:bg-[#103E52] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isCheckingOut
             ? t("checkingOut")

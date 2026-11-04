@@ -312,15 +312,15 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
   }
 
   return (
-    <section className="overflow-hidden rounded-[26px] border border-[#D9E7EC] bg-white shadow-[0_12px_40px_rgba(15,42,67,0.08)] sm:rounded-[30px]">
-      <div className="bg-gradient-to-br from-[#063B5C] via-[#075985] to-[#0F8B8D] px-5 py-5 text-white sm:px-8 sm:py-6">
-        <p className="text-sm font-medium text-blue-100">{t("title")}</p>
+    <section className="overflow-hidden rounded-xl border border-[#DCE5EA] bg-white">
+      <div className="border-b border-[#E8EDF0] bg-white px-5 py-6 text-[#153C52] sm:px-8 sm:py-7">
+        <p className="text-xs font-semibold text-[#647D8D]">{t("title")}</p>
 
-        <h1 className="mt-1 text-3xl font-bold sm:text-4xl">
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-[#153C52] sm:text-4xl">
           {room.raumBezeichnung}
         </h1>
 
-        <p className="mt-2 text-sm text-blue-50/80 sm:text-base">
+        <p className="mt-1.5 text-sm text-[#647D8D] sm:text-base">
           {room.gebaeude} · {room.etage}
         </p>
       </div>
@@ -338,7 +338,7 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
               </p>
             </div>
 
-            <div className="relative overflow-hidden rounded-[22px] bg-[#071923]">
+            <div className="relative overflow-hidden rounded-xl bg-[#071923]">
               <video
                 ref={videoRef}
                 className="aspect-[3/4] w-full object-cover sm:aspect-video"
@@ -380,7 +380,7 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
                 {room.raumBezeichnung}
               </p>
 
-              <div className="mt-3 inline-flex rounded-full bg-[#E9FAF7] px-3 py-1.5 text-sm font-bold text-[#087F73]">
+              <div className="mt-3 inline-flex rounded-md border border-[#CDE8DC] bg-[#F0F8F4] px-3 py-1.5 text-sm font-semibold text-[#176346]">
                 {availableSeats === 1
                   ? t("availableOne", { count: availableSeats })
                   : t("availableMany", { count: availableSeats })}
@@ -397,9 +397,9 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
               <button
                 type="button"
                 onClick={() => void performCheckIn(1)}
-                className="rounded-2xl border-2 border-[#D9E7EC] bg-white p-5 text-left transition hover:border-[#075985] hover:bg-[#F7FBFC]"
+                className="rounded-lg border border-[#DCE5EA] bg-white p-5 text-left transition-colors hover:border-[#8FB2C1] hover:bg-[#F7FAFB] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B7791]"
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EDF7FA] text-xl">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EDF5F7] text-xl">
                   👤
                 </div>
 
@@ -417,13 +417,13 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
                   setGroupMode(true);
                   setGroupSize(2);
                 }}
-                className={`rounded-2xl border-2 p-5 text-left transition ${
+                className={`rounded-lg border p-5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B7791] ${
                   groupMode
-                    ? "border-[#3157A4] bg-[#F7F9FF]"
-                    : "border-[#D9E7EC] bg-white hover:border-[#3157A4] hover:bg-[#F7F9FF]"
+                    ? "border-[#17536B] bg-[#EDF5F7]"
+                    : "border-[#DCE5EA] bg-white hover:border-[#8FB2C1] hover:bg-[#F7FAFB]"
                 } disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-50 disabled:opacity-50`}
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EEF4FF] text-xl">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EEF4F8] text-xl">
                   👥
                 </div>
 
@@ -436,8 +436,8 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
             </div>
 
             {groupMode && availableSeats >= 2 && (
-              <div className="mt-5 rounded-2xl border border-[#D5E1FF] bg-[#F7F9FF] p-5">
-                <p className="text-center text-sm font-bold text-[#3157A4]">
+              <div className="mt-5 rounded-lg border border-[#CFE0E8] bg-[#F3F8FA] p-5">
+                <p className="text-center text-sm font-semibold text-[#17536B]">
                   {t("groupSizeTitle")}
                 </p>
 
@@ -447,7 +447,7 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
                     onClick={decreaseGroupSize}
                     disabled={groupSize <= 2}
                     aria-label={t("decreaseGroup")}
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-white text-xl font-bold transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#C7D9E1] bg-white text-xl font-bold text-[#153C52] transition-colors hover:bg-[#EDF5F7] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     −
                   </button>
@@ -467,7 +467,7 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
                     onClick={increaseGroupSize}
                     disabled={groupSize >= availableSeats}
                     aria-label={t("increaseGroup")}
-                    className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-300 bg-white text-xl font-bold transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="flex h-11 w-11 items-center justify-center rounded-lg border border-[#C7D9E1] bg-white text-xl font-bold text-[#153C52] transition-colors hover:bg-[#EDF5F7] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     +
                   </button>
@@ -476,7 +476,7 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
                 <button
                   type="button"
                   onClick={() => void performCheckIn(groupSize)}
-                  className="mt-5 flex w-full items-center justify-center rounded-2xl bg-[#075985] px-5 py-3.5 font-bold text-white transition hover:bg-[#064B70]"
+                  className="mt-5 flex min-h-11 w-full items-center justify-center rounded-lg bg-[#17536B] px-5 py-3.5 font-semibold text-white transition-colors hover:bg-[#103E52]"
                 >
                   {t("confirmGroup", {
                     count: groupSize,
@@ -488,7 +488,7 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
             <button
               type="button"
               onClick={restartScanner}
-              className="mt-5 w-full rounded-2xl border border-slate-200 px-5 py-3.5 text-sm font-semibold text-slate-500 transition hover:bg-slate-50"
+              className="mt-5 min-h-11 w-full rounded-lg border border-[#C7D9E1] bg-white px-5 py-3.5 text-sm font-semibold text-[#17536B] transition-colors hover:bg-[#EEF5F7]"
             >
               {t("scanAgain")}
             </button>
@@ -540,7 +540,7 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
             <button
               type="button"
               onClick={restartScanner}
-              className="mt-5 w-full rounded-2xl bg-[#075985] px-5 py-3.5 font-bold text-white transition hover:bg-[#064B70]"
+              className="mt-5 min-h-11 w-full rounded-lg bg-[#17536B] px-5 py-3.5 font-semibold text-white transition-colors hover:bg-[#103E52]"
             >
               {t("scanAgain")}
             </button>
@@ -564,7 +564,7 @@ export default function CheckInPanel({ room }: CheckInPanelProps) {
         {status !== "selection" && (
           <Link
             href={`/rooms/${room.id}`}
-            className="mt-5 flex w-full items-center justify-center rounded-2xl border border-slate-200 px-5 py-3.5 text-sm font-semibold text-slate-500 transition hover:bg-slate-50"
+            className="mt-5 flex min-h-11 w-full items-center justify-center rounded-lg border border-[#C7D9E1] bg-white px-5 py-3.5 text-sm font-semibold text-[#17536B] transition-colors hover:bg-[#EEF5F7]"
           >
             {t("cancel")}
           </Link>

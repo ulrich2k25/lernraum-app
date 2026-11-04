@@ -95,41 +95,56 @@ export default async function DatenschutzPage() {
   const t = content[locale as keyof typeof content] ?? content.de;
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-none px-4 py-8 pb-8 sm:px-6 md:flex-1 md:pb-24">
-      <Link
-        href="/"
-        className="text-sm font-semibold text-[#087F83] hover:underline"
-      >
-        ← {t.back}
-      </Link>
+    <main
+      data-lernraum-privacy
+      className="w-full flex-none bg-[#F6F8FA] pb-8 text-[#183247] md:flex-1"
+    >
+      <div className="mx-auto w-full max-w-4xl px-4 pt-6 sm:px-6 md:px-8 lg:pt-9">
 
-      <header className="mt-8">
-        <h1 className="text-3xl font-bold text-[#102A43]">{t.title}</h1>
-        <p className="mt-3 leading-7 text-slate-600">{t.intro}</p>
-      </header>
+        <Link
+          href="/"
+          className="mb-6 inline-flex min-h-11 items-center justify-center rounded-lg border border-[#C7D9E1] bg-white px-4 py-2.5 text-sm font-semibold text-[#17536B] transition-colors hover:border-[#8FB2C1] hover:bg-[#EEF5F7] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B7791]"
+        >
+          {t.back}
+        </Link>
 
-      <div className="mt-8 space-y-4">
-        {t.sections.map((section) => (
-          <section
-            key={section.title}
-            className="rounded-2xl border border-[#D9E7EC] bg-white p-6"
+        <header className="mb-6">
+          <h1 className="text-3xl font-bold tracking-tight text-[#153C52] sm:text-4xl">
+            {t.title}
+          </h1>
+
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-[#647D8D] sm:text-base">
+            {t.intro}
+          </p>
+        </header>
+
+        <div className="space-y-3 sm:space-y-4">
+          {t.sections.map((section) => (
+            <section
+              key={section.title}
+              className="rounded-xl border border-[#DCE5EA] bg-white px-5 py-5 sm:px-7 sm:py-6"
+            >
+              <h2 className="text-base font-semibold text-[#153C52] sm:text-lg">
+                {section.title}
+              </h2>
+
+              <p className="mt-2 text-sm leading-7 text-[#647D8D]">
+                {section.text}
+              </p>
+            </section>
+          ))}
+        </div>
+
+        <div className="mt-6">
+          <Link
+            href="/besuche"
+            className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#17536B] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#103E52] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B7791]"
           >
-            <h2 className="text-lg font-bold text-[#102A43]">
-              {section.title}
-            </h2>
-            <p className="mt-2 text-sm leading-7 text-slate-600">
-              {section.text}
-            </p>
-          </section>
-        ))}
-      </div>
+            {t.visits}
+          </Link>
+        </div>
 
-      <Link
-        href="/besuche"
-        className="mt-8 inline-flex rounded-xl bg-[#075985] px-5 py-3 text-sm font-semibold text-white hover:bg-[#064B70]"
-      >
-        {t.visits}
-      </Link>
+      </div>
     </main>
   );
 }

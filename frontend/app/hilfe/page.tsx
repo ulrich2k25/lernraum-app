@@ -30,56 +30,57 @@ export default function HelpPage() {
   const t = useTranslations("help");
 
   return (
-    <main className="mx-auto w-full max-w-6xl flex-none px-4 pb-8 pt-6 text-[#102A43] sm:px-6 md:flex-1 md:px-8 md:pb-12 md:pt-8">
-      <section className="rounded-[26px] bg-gradient-to-br from-[#102A43] via-[#164765] to-[#087F83] px-6 py-8 text-white sm:px-9 sm:py-10">
-        <span className="inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-[#B7F4EB]">
-          Lernraum
-        </span>
+    <main
+      data-lernraum-help
+      className="mx-auto w-full max-w-6xl flex-none px-4 pb-8 pt-6 text-[#183247] sm:px-6 md:flex-1 md:px-8 md:pb-12 md:pt-8"
+    >
+      <Link
+        href="/"
+        className="mb-6 inline-flex min-h-11 items-center justify-center rounded-lg border border-[#C7D9E1] bg-white px-4 py-2.5 text-sm font-semibold text-[#17536B] transition-colors hover:border-[#8FB2C1] hover:bg-[#EEF5F7] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0B7791]"
+      >
+        {t("back")}
+      </Link>
 
-        <h1 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+      <header className="mb-6">
+        <h1 className="text-3xl font-bold tracking-tight text-[#153C52] sm:text-4xl">
           {t("title")}
         </h1>
 
-        <p className="mt-3 max-w-2xl text-sm leading-7 text-[#D5E7EE] sm:text-base">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-[#647D8D] sm:text-base">
           {t("description")}
         </p>
-      </section>
+      </header>
 
-      <section className="mt-6 grid gap-4 md:grid-cols-2">
+      <section className="grid gap-4 sm:grid-cols-2" aria-label={t("title")}>
         {steps.map((step) => (
           <article
             key={step.number}
-            className="rounded-[22px] border border-[#DFE9EF] bg-white p-6 shadow-[0_8px_30px_rgba(16,42,67,0.04)]"
+            className="rounded-xl border border-[#DCE5EA] bg-white p-5 sm:p-6"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#E5F5F2] text-sm font-extrabold text-[#087F83]">
+            <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EDF5F7] text-sm font-semibold text-[#17536B]">
               {step.number}
             </div>
 
-            <h2 className="mt-5 text-lg font-bold">{t(step.title)}</h2>
+            <h2 className="mt-4 text-lg font-semibold text-[#153C52]">
+              {t(step.title)}
+            </h2>
 
-            <p className="mt-2 text-sm leading-7 text-[#60778A]">
+            <p className="mt-2 text-sm leading-6 text-[#647D8D]">
               {t(step.description)}
             </p>
           </article>
         ))}
       </section>
 
-      <aside className="mt-6 rounded-[22px] border border-[#CFE5E4] bg-[#EAF7F5] px-6 py-5">
-        <h2 className="font-bold text-[#102A43]">{t("noticeTitle")}</h2>
+      <aside className="mt-5 rounded-xl border border-[#CFE4DE] bg-[#F1F8F5] px-5 py-5 sm:px-6">
+        <h2 className="text-base font-semibold text-[#153C52]">
+          {t("noticeTitle")}
+        </h2>
 
-        <p className="mt-2 text-sm leading-7 text-[#496B70]">
+        <p className="mt-2 text-sm leading-6 text-[#496B70]">
           {t("noticeDescription")}
         </p>
       </aside>
-
-      <div className="mt-8 flex justify-center">
-        <Link
-          href="/"
-          className="inline-flex items-center justify-center rounded-xl bg-[#102A43] px-6 py-3.5 text-sm font-bold text-white transition hover:bg-[#173F5D]"
-        >
-          {t("back")}
-        </Link>
-      </div>
     </main>
   );
 }

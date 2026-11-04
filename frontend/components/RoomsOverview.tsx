@@ -13,12 +13,12 @@ export default async function RoomsOverview({ rooms }: RoomsOverviewProps) {
           <div className="mb-2 flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-[#0F8B8D]" />
 
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#0F8B8D]">
+            <p className="text-xs font-medium uppercase tracking-[0.09em] text-[#5C7582]">
               {t("eyebrow")}
             </p>
           </div>
 
-          <h2 className="text-[26px] font-extrabold tracking-[-0.035em] text-[#102A43] sm:text-[30px]">
+          <h2 className="text-[25px] font-semibold tracking-tight text-[#153C52] sm:text-[28px]">
             {t("title")}
           </h2>
         </div>

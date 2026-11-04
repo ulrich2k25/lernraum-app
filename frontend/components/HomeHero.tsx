@@ -4,30 +4,30 @@ export default async function HomeHero() {
   const t = await getTranslations("homeHero");
 
   return (
-    <section className="relative mb-7 overflow-hidden rounded-[26px] bg-[#0B3553] text-white shadow-[0_16px_45px_rgba(16,42,67,0.12)] sm:rounded-[30px]">
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0B3553] via-[#075985] to-[#087D86]" />
+    <section className="relative mb-6 overflow-hidden rounded-lg border border-[#D7E5EA] border-l-4 border-l-[#0B6E85] bg-[#EDF4F6] text-[#153C52]">
+      <div className="hidden" />
 
-      <div className="absolute -right-20 -top-32 h-80 w-80 rounded-full border-[55px] border-white/[0.045]" />
-      <div className="absolute -bottom-32 right-24 h-64 w-64 rounded-full border-[40px] border-[#5EEAD4]/[0.07]" />
+      <div className="hidden" />
+      <div className="hidden" />
 
-      <div className="relative flex items-center justify-between gap-6 px-6 py-6 sm:px-8 sm:py-7 lg:px-10">
-        <div className="relative z-10 max-w-[650px]">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[11px] font-bold text-[#D7F7F2] backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#F4C95D]" />
+      <div className="relative flex items-center gap-4 px-5 py-5 sm:px-7 sm:py-6 lg:px-8">
+        <div className="relative z-10 w-full max-w-[900px]">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-md border border-[#CBDEE5] bg-white/70 px-2.5 py-1 text-xs font-medium text-[#24566B]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#0E8193]" />
             {t("badge")}
           </div>
 
-          <h2 className="text-[25px] font-extrabold leading-[1.15] tracking-[-0.04em] sm:text-[30px] lg:text-[34px]">
+          <h2 className="text-[25px] font-semibold leading-[1.25] tracking-tight sm:text-[28px] lg:text-[30px]">
             {t("title")}
-            <br className="hidden sm:block" /> {t("titleSecond")}
+            <br className="hidden" /> {t("titleSecond")}
           </h2>
 
-          <p className="mt-3 max-w-[550px] text-sm leading-6 text-[#D2E6EE] sm:text-[15px]">
+          <p className="mt-2 max-w-[720px] text-sm leading-6 text-[#547081] sm:text-[15px]">
             {t("description")}
           </p>
         </div>
 
-        <div className="relative hidden h-36 w-36 shrink-0 items-center justify-center rounded-[35px] border border-white/15 bg-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.10)] backdrop-blur lg:flex">
+        <div className="hidden">
           <svg
             viewBox="0 0 100 100"
             fill="none"

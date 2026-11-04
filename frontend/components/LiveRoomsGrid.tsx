@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import type { Room } from "../types/room";
@@ -75,14 +75,14 @@ export default function LiveRoomsGrid({
 
   return (
     <>
-      <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+      <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {rooms.map((room) => (
           <RoomCard key={room.id} room={room} />
         ))}
       </div>
 
       {rooms.length === 0 && (
-        <div className="rounded-[26px] border border-dashed border-[#B7CBD4] bg-white px-6 py-16 text-center">
+        <div className="rounded-lg border border-[#DCE4EA] bg-white px-6 py-12 text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#EDF7FA] text-xl text-[#075985]">
             ⌂
           </div>

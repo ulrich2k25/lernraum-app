@@ -30,12 +30,12 @@ export default function AppFooter() {
 
   const mobileLinkClass =
     "flex min-h-[44px] items-center justify-center " +
-    "rounded-xl border border-white/10 bg-white/[0.06] " +
+    "rounded-md border border-[#DCE5EA] bg-white " +
     "px-2 py-2 text-center text-[11px] font-semibold leading-4 " +
-    "text-[#D5E7EE] transition " +
-    "hover:border-[#5EEAD4]/30 hover:bg-white/10 hover:text-[#5EEAD4] " +
+    "text-[#34576B] transition-colors " +
+    "hover:border-[#A2C5D1] hover:bg-[#EDF4F6] hover:text-[#11536A] " +
     "focus-visible:outline-2 focus-visible:outline-offset-2 " +
-    "focus-visible:outline-[#5EEAD4] " +
+    "focus-visible:outline-[#0E7490] " +
     "md:inline md:min-h-0 md:rounded-none md:border-0 " +
     "md:bg-transparent md:px-0 md:py-0 md:text-left " +
     "md:text-sm md:leading-5 md:hover:bg-transparent";
@@ -46,15 +46,15 @@ export default function AppFooter() {
         className="
           flex flex-col
           gap-3
-          rounded-[20px]
-          border border-[#1C4765]
-          bg-[#102A43]
-          px-4 py-4
-          shadow-[0_8px_24px_rgba(16,42,67,0.08)]
+          rounded-xl
+          border border-[#D3E0E7] border-t-2 border-t-[#528B99]
+          bg-[#E8F0F4]
+          px-5 py-5
+          shadow-none
 
           md:gap-5
-          md:rounded-[24px]
-          md:px-6 md:py-7
+          md:rounded-xl
+          md:px-7 md:py-6
           md:shadow-none
 
           lg:px-8
@@ -79,9 +79,9 @@ export default function AppFooter() {
                 flex h-9 w-9 shrink-0
                 items-center justify-center
                 rounded-xl
-                border border-white/10
-                bg-white/10
-                text-[#5EEAD4]
+                border border-[#DDE8EC]
+                bg-white
+                text-[#17677D]
 
                 md:h-10 md:w-10
                 md:rounded-[14px]
@@ -103,11 +103,11 @@ export default function AppFooter() {
             </div>
 
             <div className="min-w-0">
-              <p className="text-sm font-extrabold tracking-[-0.02em] text-white">
+              <p className="text-sm font-semibold tracking-tight text-[#173D52]">
                 Lernraum
               </p>
 
-              <p className="mt-0.5 text-xs text-[#B8CCDA]">{t("school")}</p>
+              <p className="mt-0.5 text-xs text-[#698090]">{t("school")}</p>
             </div>
           </div>
 
@@ -139,8 +139,8 @@ export default function AppFooter() {
         </div>
 
         {/* Texte informatif */}
-        <div className="border-t border-white/10 pt-3 md:pt-4">
-          <p className="text-[11px] leading-[18px] text-[#A8BECD] md:text-xs md:leading-5">
+        <div className="border-t border-[#C9D9E2] pt-3 md:pt-4">
+          <p className="text-[11px] leading-[18px] text-[#6D8190] md:text-xs md:leading-5">
             {t("tagline")}
           </p>
         </div>

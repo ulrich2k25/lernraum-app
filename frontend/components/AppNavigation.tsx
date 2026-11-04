@@ -57,20 +57,20 @@ export default function AppNavigation() {
   const visitsActive = pathname.startsWith("/besuche");
 
   const desktopBase =
-    "inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200";
+    "inline-flex items-center justify-center rounded-md px-4 py-2.5 text-sm font-semibold transition-colors";
 
   const mobileBase =
-    "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-2 py-2 text-[11px] font-bold transition-colors";
+    "flex min-w-0 flex-1 flex-col items-center justify-center gap-1 rounded-lg px-2 py-2 text-xs font-semibold transition-colors";
 
   return (
     <>
-      <nav className="mb-5 hidden items-center gap-1 rounded-[18px] border border-[#E1EAF0] bg-white p-1.5 shadow-[0_4px_18px_rgba(16,42,67,0.035)] md:flex">
+      <nav className="mb-6 hidden items-center gap-1 border-b border-[#DCE4EA] pb-2 md:flex">
         <Link
           href="/"
           className={`${desktopBase} ${
             roomsActive
-              ? "bg-[#102A43] text-white shadow-sm"
-              : "text-[#6B8094] hover:bg-[#F1F6F9] hover:text-[#102A43]"
+              ? "bg-[#E5F0F3] text-[#124E63]"
+              : "text-[#63798A] hover:bg-[#EDF3F5] hover:text-[#193E50]"
           }`}
         >
           {t("rooms")}
@@ -81,8 +81,8 @@ export default function AppNavigation() {
             href="/session"
             className={`${desktopBase} ${
               sessionActive
-                ? "bg-[#102A43] text-white shadow-sm"
-                : "text-[#6B8094] hover:bg-[#F1F6F9] hover:text-[#102A43]"
+                ? "bg-[#E5F0F3] text-[#124E63]"
+                : "text-[#63798A] hover:bg-[#EDF3F5] hover:text-[#193E50]"
             }`}
           >
             {t("currentSession")}
@@ -93,15 +93,15 @@ export default function AppNavigation() {
           href="/besuche"
           className={`${desktopBase} ${
             visitsActive
-              ? "bg-[#102A43] text-white shadow-sm"
-              : "text-[#6B8094] hover:bg-[#F1F6F9] hover:text-[#102A43]"
+              ? "bg-[#E5F0F3] text-[#124E63]"
+              : "text-[#63798A] hover:bg-[#EDF3F5] hover:text-[#193E50]"
           }`}
         >
           {t("visits")}
         </Link>
       </nav>
 
-      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[#E1EAF0] bg-white/95 px-3 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 shadow-[0_-8px_30px_rgba(16,42,67,0.06)] backdrop-blur-xl md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[#DCE4EA] bg-white px-3 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 shadow-[0_-3px_14px_rgba(16,42,67,0.04)] md:hidden">
         <div className="mx-auto flex max-w-md items-center gap-2">
           <Link
             href="/"
